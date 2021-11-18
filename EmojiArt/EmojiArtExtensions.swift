@@ -4,14 +4,14 @@ extension Collection where Element: Identifiable {
     func firstIndex(matching element: Element) -> Self.Index? {
         firstIndex(where: { $0.id == element.id })
     }
-    
+
     func contains(matching element: Element) -> Bool {
-        self.contains(where: { $0.id == element.id })
+        contains(where: { $0.id == element.id })
     }
 }
 
 extension Data {
-    var utf8: String? { String(data: self, encoding: .utf8 ) }
+    var utf8: String? { String(data: self, encoding: .utf8) }
 }
 
 extension URL {
@@ -26,12 +26,12 @@ extension URL {
         }
         if isFileURL {
             var url = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
-            url = url?.appendingPathComponent(self.lastPathComponent)
+            url = url?.appendingPathComponent(lastPathComponent)
             if url != nil {
                 return url!
             }
         }
-        return self.baseURL ?? self
+        return baseURL ?? self
     }
 }
 
@@ -42,9 +42,9 @@ extension CGRect {
 }
 
 extension Array where Element == NSItemProvider {
-    func loadObjects<T>(ofType theType: T.Type, firstOnly: Bool = false, using load: @escaping (T) -> Void) -> Bool where T: NSItemProviderReading {
-        if let provider = self.first(where: { $0.canLoadObject(ofClass: theType) }) {
-            provider.loadObject(ofClass: theType) { object, error in
+    func loadObjects<T>(ofType theType: T.Type, firstOnly _: Bool = false, using load: @escaping (T) -> Void) -> Bool where T: NSItemProviderReading {
+        if let provider = first(where: { $0.canLoadObject(ofClass: theType) }) {
+            provider.loadObject(ofClass: theType) { object, _ in
                 if let value = object as? T {
                     DispatchQueue.main.async {
                         load(value)
@@ -56,9 +56,9 @@ extension Array where Element == NSItemProvider {
         return false
     }
 
-    func loadObjects<T>(ofType theType: T.Type, firstOnly: Bool = false, using load: @escaping (T) -> Void) -> Bool where T: _ObjectiveCBridgeable, T._ObjectiveCType: NSItemProviderReading {
-        if let provider = self.first(where: { $0.canLoadObject(ofClass: theType) }) {
-            let _ = provider.loadObject(ofClass: theType) { object, error in
+    func loadObjects<T>(ofType theType: T.Type, firstOnly _: Bool = false, using load: @escaping (T) -> Void) -> Bool where T: _ObjectiveCBridgeable, T._ObjectiveCType: NSItemProviderReading {
+        if let provider = first(where: { $0.canLoadObject(ofClass: theType) }) {
+            _ = provider.loadObject(ofClass: theType) { object, _ in
                 if let value = object {
                     DispatchQueue.main.async {
                         load(value)
@@ -71,11 +71,11 @@ extension Array where Element == NSItemProvider {
     }
 
     func loadFirstObject<T>(ofType theType: T.Type, using load: @escaping (T) -> Void) -> Bool where T: NSItemProviderReading {
-        self.loadObjects(ofType: theType, firstOnly: true, using: load)
+        loadObjects(ofType: theType, firstOnly: true, using: load)
     }
 
     func loadFirstObject<T>(ofType theType: T.Type, using load: @escaping (T) -> Void) -> Bool where T: _ObjectiveCBridgeable, T._ObjectiveCType: NSItemProviderReading {
-        self.loadObjects(ofType: theType, firstOnly: true, using: load)
+        loadObjects(ofType: theType, firstOnly: true, using: load)
     }
 }
 
@@ -92,57 +92,60 @@ extension String {
 }
 
 extension CGPoint {
-    static func -(lhs: Self, rhs: Self) -> CGSize {
+    static func - (lhs: Self, rhs: Self) -> CGSize {
         CGSize(width: lhs.x - rhs.x, height: lhs.y - rhs.y)
     }
-    
-    static func +(lhs: Self, rhs: CGSize) -> CGPoint {
+
+    static func + (lhs: Self, rhs: CGSize) -> CGPoint {
         CGPoint(x: lhs.x + rhs.width, y: lhs.y + rhs.height)
     }
 
-    static func -(lhs: Self, rhs: CGSize) -> CGPoint {
+    static func - (lhs: Self, rhs: CGSize) -> CGPoint {
         CGPoint(x: lhs.x - rhs.width, y: lhs.y - rhs.height)
     }
 
-    static func *(lhs: Self, rhs: CGFloat) -> CGPoint {
+    static func * (lhs: Self, rhs: CGFloat) -> CGPoint {
         CGPoint(x: lhs.x * rhs, y: lhs.y * rhs)
     }
 
-    static func /(lhs: Self, rhs: CGFloat) -> CGPoint {
+    static func / (lhs: Self, rhs: CGFloat) -> CGPoint {
         CGPoint(x: lhs.x / rhs, y: lhs.y / rhs)
     }
 }
 
 extension CGSize {
-    static func +(lhs: Self, rhs: Self) -> CGSize {
+    static func + (lhs: Self, rhs: Self) -> CGSize {
         CGSize(width: lhs.width + rhs.width, height: lhs.height + rhs.height)
     }
-    static func -(lhs: Self, rhs: Self) -> CGSize {
+
+    static func - (lhs: Self, rhs: Self) -> CGSize {
         CGSize(width: lhs.width - rhs.width, height: lhs.height - rhs.height)
     }
-    static func *(lhs: Self, rhs: CGFloat) -> CGSize {
+
+    static func * (lhs: Self, rhs: CGFloat) -> CGSize {
         CGSize(width: lhs.width * rhs, height: lhs.height * rhs)
     }
-    static func /(lhs: Self, rhs: CGFloat) -> CGSize {
-        CGSize(width: lhs.width/rhs, height: lhs.height/rhs)
+
+    static func / (lhs: Self, rhs: CGFloat) -> CGSize {
+        CGSize(width: lhs.width / rhs, height: lhs.height / rhs)
     }
 }
 
-extension String
-{
+extension String {
     func uniqued<StringCollection>(withRespectTo otherStrings: StringCollection) -> String
-    where StringCollection: Collection, StringCollection.Element == String {
+        where StringCollection: Collection, StringCollection.Element == String
+    {
         var unique = self
         while otherStrings.contains(unique) {
             unique = unique.incremented
         }
         return unique
     }
-    
-    var incremented: String  {
-        let prefix = String(self.reversed().drop(while: { $0.isNumber }).reversed())
+
+    var incremented: String {
+        let prefix = String(reversed().drop(while: { $0.isNumber }).reversed())
         if let number = Int(self.dropFirst(prefix.count)) {
-            return "\(prefix)\(number+1)"
+            return "\(prefix)\(number + 1)"
         } else {
             return "\(self) 1"
         }
@@ -150,18 +153,17 @@ extension String
 }
 
 extension UIImage {
-    
     func storeInFilesystem(name: String = "\(Date().timeIntervalSince1970)") -> URL? {
         var url = try? FileManager.default.url(
             for: .applicationSupportDirectory,
-               in: .userDomainMask,
-               appropriateFor: nil,
-               create: true
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: true
         )
         url = url?.appendingPathComponent(name)
         if url != nil {
             do {
-                try self.jpegData(compressionQuality: 1.0)?.write(to: url!)
+                try jpegData(compressionQuality: 1.0)?.write(to: url!)
             } catch {
                 url = nil
             }
