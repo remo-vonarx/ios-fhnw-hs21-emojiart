@@ -30,7 +30,7 @@ struct PaletteChooser: View {
             } label: {
                 Image(systemName: "square.and.pencil").imageScale(.large)
             }
-            .popover(isPresented: $isPaletteEditorPresented) {
+            .sheet(isPresented: $isPaletteEditorPresented) {
                 PaletteEditor(chosenPalette: $chosenPalette, document: document)
                     .frame(width: 300, height: 500, alignment: .top)
             }

@@ -36,9 +36,20 @@ struct PaletteEditor: View {
                         emojiToAdd = ""
                     }
                 })
+                Section(header: Text("Remove Emojis"), content: {
+                    LazyVGrid (columns:[GridItem(.adaptive(minimum: 40))]) {
+                        ForEach(chosenPalette.map{String($0)},id: \.self){ emoji in
+                            Text(emoji)
+                                .font(.system(size: 40))
+                                .onTapGesture {
+                                    withAnimation{
+                                        chosenPalette = document.removeEmojis(emoji, fromPalette: chosenPalette)
+                                    }
+                                }
+                        }
+                    }
+                })
             }
-            Text(chosenPalette)
-                .padding()
         }
     }
 }
