@@ -26,6 +26,17 @@ struct EmojiArtDocumentView: View {
             .gesture(panGesture())
             .gesture(zoomGesture())
             .clipped()
+            
+            createTimeTracker()
+        }
+    }
+    
+    
+    
+    private func createTimeTracker() -> some View {
+        document.startTimeTracker()
+        return HStack{
+            Label("\(document.timeSpent) s", systemImage: "timer")
         }
     }
 

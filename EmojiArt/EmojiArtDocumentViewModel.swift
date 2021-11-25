@@ -8,6 +8,11 @@ class EmojiArtDocumentViewModel: ObservableObject {
 
     @Published private var emojiArtModel: EmojiArtModel
     @Published private(set) var backgroundImage: UIImage?
+    @Published var timeSpent: Int
+
+    private var timer: Publishers.Autoconnect<Timer.TimerPublisher>? = nil
+    private var subscription: AnyCancellable? = nil
+
     var emojis: [EmojiArtModel.Emoji] { emojiArtModel.emojis }
 
     var backgroundURL: URL? {
@@ -22,6 +27,7 @@ class EmojiArtDocumentViewModel: ObservableObject {
 
     var emojiartModelSink: AnyCancellable?
     init() {
+        timeSpent = 0
         let emojiArtJson = UserDefaults.standard.data(forKey: EmojiArtDocumentViewModel.emojiArtDocumentKey)
         emojiArtModel = EmojiArtModel(json: emojiArtJson) ?? EmojiArtModel()
         emojiartModelSink = $emojiArtModel.sink { emojiArtModel in
@@ -35,6 +41,17 @@ class EmojiArtDocumentViewModel: ObservableObject {
 
     func addEmoji(_ emoji: String, at location: CGPoint, size: CGFloat) {
         emojiArtModel.addEmoji(emoji, x: Int(location.x), y: Int(location.y), size: Int(size))
+    }
+    
+    func startTimeTracker(){
+        timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+        subscription = timer?.sink(receiveValue: { _ in
+           self.updateTimeSpent()
+        })
+    }
+    
+    func updateTimeSpent(){
+        timeSpent += 1
     }
 
     private var fetchImageSink: AnyCancellable?
