@@ -2,7 +2,8 @@ import SwiftUI
 
 struct EmojiArtDocumentView: View {
     @ObservedObject var document: EmojiArtDocumentViewModel
-    @State private var chosenPalette: String
+    @State private var chosenPalette: String = ""
+    @Environment(\.scenePhase) private var scenePhase
 
     init(document: EmojiArtDocumentViewModel) {
         self.document = document
@@ -26,17 +27,19 @@ struct EmojiArtDocumentView: View {
             .gesture(panGesture())
             .gesture(zoomGesture())
             .clipped()
-            
+
             createTimeTracker()
         }
     }
-    
-    
-    
+
     private func createTimeTracker() -> some View {
         document.startTimeTracker()
-        return HStack{
-            Label("\(document.timeSpent) s", systemImage: "timer")
+        return HStack {
+            Label("\(document.timeSpentInSeconds) s", systemImage: "timer")
+        }.onChange(of: scenePhase) { scenePhase in
+            if scenePhase == .inactive || scenePhase == .background {
+                document.saveTimeSpent()
+            }
         }
     }
 

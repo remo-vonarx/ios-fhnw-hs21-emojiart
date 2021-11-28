@@ -5,10 +5,12 @@ class EmojiArtDocumentViewModel: ObservableObject {
     static let palette: String = "🐶🐱🐹🐰🦊🐼🐨🐯🐸🐵🐧🐦🐤🦆🦅🦇🐺"
 
     private static let emojiArtDocumentKey = "EmojiArtDocumentViewModel.Untitled"
+    private static let timeSpentInSecondsKey = "EmojiArtDocumentViewModel.timeSpentInSeconds"
+
 
     @Published private var emojiArtModel: EmojiArtModel
     @Published private(set) var backgroundImage: UIImage?
-    @Published var timeSpent: Int
+    @Published var timeSpentInSeconds: Int
 
     private var timer: Publishers.Autoconnect<Timer.TimerPublisher>? = nil
     private var subscription: AnyCancellable? = nil
@@ -27,7 +29,7 @@ class EmojiArtDocumentViewModel: ObservableObject {
 
     var emojiartModelSink: AnyCancellable?
     init() {
-        timeSpent = 0
+        timeSpentInSeconds = UserDefaults.standard.integer(forKey: EmojiArtDocumentViewModel.timeSpentInSecondsKey)
         let emojiArtJson = UserDefaults.standard.data(forKey: EmojiArtDocumentViewModel.emojiArtDocumentKey)
         emojiArtModel = EmojiArtModel(json: emojiArtJson) ?? EmojiArtModel()
         emojiartModelSink = $emojiArtModel.sink { emojiArtModel in
@@ -51,8 +53,13 @@ class EmojiArtDocumentViewModel: ObservableObject {
     }
     
     func updateTimeSpent(){
-        timeSpent += 1
+        timeSpentInSeconds += 1
     }
+    
+    func saveTimeSpent(){
+        UserDefaults.standard.set(timeSpentInSeconds, forKey: EmojiArtDocumentViewModel.timeSpentInSecondsKey)
+    }
+    
 
     private var fetchImageSink: AnyCancellable?
     private func fetchBackgroundImageData() {
