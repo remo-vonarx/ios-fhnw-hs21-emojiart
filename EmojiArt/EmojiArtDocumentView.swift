@@ -3,6 +3,7 @@ import SwiftUI
 struct EmojiArtDocumentView: View {
     @ObservedObject var document: EmojiArtDocumentViewModel
     @State private var chosenPalette: String
+    @State private var isPastingExplanationPresented = false
 
     init(document: EmojiArtDocumentViewModel) {
         self.document = document
@@ -27,12 +28,27 @@ struct EmojiArtDocumentView: View {
             .gesture(zoomGesture())
             .clipped()
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    if let url = UIPasteboard.general.url {
+                        document.backgroundURL = url
+                    } else {
+                        isPastingExplanationPresented = true
+                    }
+                } label: {
+                    Image(systemName: "doc.on.clipboard").imageScale(.large)
+                }
+                .alert(isPresented: $isPastingExplanationPresented) {
+                    Alert(title: Text("Paste Background Image"), message: Text("Copy the URL of an image to set it as background image"))
+                }
+            }
+        }
     }
 
     private func createPalette() -> some View {
         return HStack {
             PaletteChooser(document: document, chosenPalette: $chosenPalette)
-
             ScrollView(.horizontal) {
                 HStack {
                     ForEach(chosenPalette.map { String($0) }, id: \.self) { emoji in
@@ -42,7 +58,6 @@ struct EmojiArtDocumentView: View {
                     }
                 }
             }
-
         }.padding(.horizontal)
     }
 
@@ -58,7 +73,7 @@ struct EmojiArtDocumentView: View {
         )
         .edgesIgnoringSafeArea([.horizontal, .bottom])
         .onDrop(of: [.url, .plainText, .image], isTargeted: nil) { providers, location in
-            drop(providers: providers, location: location, geometry: geometry)
+            return drop(providers: providers, location: location, geometry: geometry)
         }
         .onReceive(document.$backgroundImage) { backgroundImage in
             zoomToFit(backgroundImage: backgroundImage, in: geometry)
@@ -98,7 +113,6 @@ struct EmojiArtDocumentView: View {
     }
 
     // MARK: - Panning
-
     @State private var steadyPanOffset: CGSize = .zero
     @GestureState private var gesturePanOffset: CGSize = .zero
     private var panOffset: CGSize {
@@ -116,7 +130,6 @@ struct EmojiArtDocumentView: View {
     }
 
     // MARK: - Zooming
-
     @State private var steadyZoomScale: CGFloat = 1.0
     @GestureState private var gestureZoomScale: CGFloat = 1.0
     private var zoomScale: CGFloat {
@@ -150,7 +163,6 @@ struct EmojiArtDocumentView: View {
     }
 
     // MARK: - Positioning & Sizing Emojis
-
     private func toCanvasCoordinate(from emojiCoordinate: CGPoint, in geometry: GeometryProxy) -> CGPoint {
         let center = geometry.frame(in: .local).center
         return CGPoint(
@@ -168,6 +180,5 @@ struct EmojiArtDocumentView: View {
     }
 
     // MARK: - Drawing constants
-
     private let defaultEmojiSize: CGFloat = 40
 }

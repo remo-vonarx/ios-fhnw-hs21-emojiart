@@ -22,8 +22,10 @@ class EmojiArtDocumentStore: ObservableObject {
         documentNames.keys.sorted { documentNames[$0]! < documentNames[$1]! }
     }
 
-    func addDocument(named name: String = "Untitled") {
-        documentNames[EmojiArtDocumentViewModel()] = name
+    @discardableResult func addDocument(named name: String = "Untitled") -> EmojiArtDocumentViewModel {
+        let document = EmojiArtDocumentViewModel()
+        documentNames[document] = name
+        return document
     }
 
     func removeDocument(_ document: EmojiArtDocumentViewModel) {

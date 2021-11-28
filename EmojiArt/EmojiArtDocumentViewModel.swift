@@ -1,7 +1,7 @@
 import Combine
 import SwiftUI
 
-class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable {
+class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifiable {
     static func == (lhs: EmojiArtDocumentViewModel, rhs: EmojiArtDocumentViewModel) -> Bool {
         lhs.id == rhs.id
     }
@@ -11,9 +11,12 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable {
     }
     
     let id: UUID
+    
     static let palette: String = "🐶🐱🐹🐰🦊🐼🐨🐯🐸🐵🐧🐦🐤🦆🦅🦇🐺"
 
     @Published private var emojiArtModel: EmojiArtModel
+    var emojiartModelSink: AnyCancellable?
+    
     @Published private(set) var backgroundImage: UIImage?
     var emojis: [EmojiArtModel.Emoji] { emojiArtModel.emojis }
 
@@ -27,7 +30,7 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable {
         }
     }
 
-    var emojiartModelSink: AnyCancellable?
+    
     init(id:UUID = UUID()) {
         self.id = id
         let emojiArtDocumentKey = "EmojiArtDocumentViewModel.Untitled\(id)"
@@ -41,7 +44,6 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable {
     }
 
     // MARK: - Intents
-
     func addEmoji(_ emoji: String, at location: CGPoint, size: CGFloat) {
         emojiArtModel.addEmoji(emoji, x: Int(location.x), y: Int(location.y), size: Int(size))
     }
