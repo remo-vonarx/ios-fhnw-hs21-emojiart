@@ -1,12 +1,22 @@
 import Combine
 import SwiftUI
 
-class EmojiArtDocumentViewModel: ObservableObject {
+class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifiable {
+    static func == (lhs: EmojiArtDocumentViewModel, rhs: EmojiArtDocumentViewModel) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    func hash(into hasher: inout Hasher){
+        hasher.combine(id)
+    }
+    
+    let id: UUID
+    
     static let palette: String = "🐶🐱🐹🐰🦊🐼🐨🐯🐸🐵🐧🐦🐤🦆🦅🦇🐺"
 
-    private static let emojiArtDocumentKey = "EmojiArtDocumentViewModel.Untitled"
-
     @Published private var emojiArtModel: EmojiArtModel
+    var emojiartModelSink: AnyCancellable?
+    
     @Published private(set) var backgroundImage: UIImage?
     var emojis: [EmojiArtModel.Emoji] { emojiArtModel.emojis }
 
@@ -20,19 +30,20 @@ class EmojiArtDocumentViewModel: ObservableObject {
         }
     }
 
-    var emojiartModelSink: AnyCancellable?
-    init() {
-        let emojiArtJson = UserDefaults.standard.data(forKey: EmojiArtDocumentViewModel.emojiArtDocumentKey)
+    
+    init(id:UUID = UUID()) {
+        self.id = id
+        let emojiArtDocumentKey = "EmojiArtDocumentViewModel.Untitled\(id)"
+        let emojiArtJson = UserDefaults.standard.data(forKey: emojiArtDocumentKey)
         emojiArtModel = EmojiArtModel(json: emojiArtJson) ?? EmojiArtModel()
         emojiartModelSink = $emojiArtModel.sink { emojiArtModel in
             print("JSON: \(emojiArtModel.json?.utf8 ?? "nil")")
-            UserDefaults.standard.set(emojiArtModel.json, forKey: EmojiArtDocumentViewModel.emojiArtDocumentKey)
+            UserDefaults.standard.set(emojiArtModel.json, forKey: emojiArtDocumentKey)
         }
         fetchBackgroundImageData()
     }
 
     // MARK: - Intents
-
     func addEmoji(_ emoji: String, at location: CGPoint, size: CGFloat) {
         emojiArtModel.addEmoji(emoji, x: Int(location.x), y: Int(location.y), size: Int(size))
     }
