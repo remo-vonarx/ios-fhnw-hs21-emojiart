@@ -22,7 +22,7 @@ struct PaletteChooser: View {
             Button(action: {
                 chosenPalette = document.palette(after: chosenPalette)
             }) {
-                Image(systemName: "arrow.right")
+                Image(systemName: "arrow.right").imageScale(.large)
             }
             Text(document.paletteNames[chosenPalette] ?? "").imageScale(.large)
             Button {
@@ -32,7 +32,6 @@ struct PaletteChooser: View {
             }
             .sheet(isPresented: $isPaletteEditorPresented) {
                 PaletteEditor(chosenPalette: $chosenPalette, document: document)
-                    .frame(width: 300, height: 500, alignment: .top)
             }
         }
     }
