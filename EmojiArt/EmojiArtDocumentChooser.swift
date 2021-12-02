@@ -44,6 +44,11 @@ struct EmojiArtDocumentChooser: View {
                         Image(systemName: "plus").imageScale(.large)
                     }
                 }
+                ToolbarItem(placement: .navigationBarLeading) {
+                    NavigationLink(destination: createEmojiArtWallView()) {
+                        Image(systemName: "square.grid.2x2.fill").imageScale(.large)
+                    }
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
@@ -59,5 +64,9 @@ struct EmojiArtDocumentChooser: View {
         return EmojiArtDocumentView(document: document)
             .navigationTitle(store.name(for: document))
     }
-}
 
+    private func createEmojiArtWallView() -> some View {
+        return EmojiArtWallView(documents: store.documents)
+            .navigationTitle("Emoji Art Wall")
+    }
+}
