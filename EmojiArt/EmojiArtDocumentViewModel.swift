@@ -14,10 +14,17 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
     
     static let palette: String = "🐶🐱🐹🐰🦊🐼🐨🐯🐸🐵🐧🐦🐤🦆🦅🦇🐺"
 
+    private static let emojiArtDocumentKey = "EmojiArtDocumentViewModel.Untitled"
+
     @Published private var emojiArtModel: EmojiArtModel
     var emojiartModelSink: AnyCancellable?
     
     @Published private(set) var backgroundImage: UIImage?
+    @Published var timeSpentInSeconds: Int
+
+    private var timer: Publishers.Autoconnect<Timer.TimerPublisher>? = nil
+    private var subscription: AnyCancellable? = nil
+
     var emojis: [EmojiArtModel.Emoji] { emojiArtModel.emojis }
 
     var backgroundURL: URL? {
@@ -29,12 +36,15 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
             fetchBackgroundImageData()
         }
     }
-
     
     init(id:UUID = UUID()) {
         self.id = id
         let emojiArtDocumentKey = "EmojiArtDocumentViewModel.Untitled\(id)"
         let emojiArtJson = UserDefaults.standard.data(forKey: emojiArtDocumentKey)
+
+    var emojiartModelSink: AnyCancellable?
+    init() {
+        let emojiArtJson = UserDefaults.standard.data(forKey: EmojiArtDocumentViewModel.emojiArtDocumentKey)
         emojiArtModel = EmojiArtModel(json: emojiArtJson) ?? EmojiArtModel()
         emojiartModelSink = $emojiArtModel.sink { emojiArtModel in
             print("JSON: \(emojiArtModel.json?.utf8 ?? "nil")")
@@ -47,6 +57,22 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
     func addEmoji(_ emoji: String, at location: CGPoint, size: CGFloat) {
         emojiArtModel.addEmoji(emoji, x: Int(location.x), y: Int(location.y), size: Int(size))
     }
+    
+    func startTimeTracker(){
+        timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+        subscription = timer?.sink(receiveValue: { _ in
+           self.updateTimeSpent()
+        })
+    }
+    
+    func updateTimeSpent(){
+        timeSpentInSeconds += 1
+    }
+    
+    func saveTimeSpent(){
+        UserDefaults.standard.set(timeSpentInSeconds, forKey: EmojiArtDocumentViewModel.timeSpentInSecondsKey)
+    }
+    
 
     private var fetchImageSink: AnyCancellable?
     private func fetchBackgroundImageData() {
