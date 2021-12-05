@@ -13,13 +13,17 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
     let id: UUID
     
     static let palette: String = "🐶🐱🐹🐰🦊🐼🐨🐯🐸🐵🐧🐦🐤🦆🦅🦇🐺"
-
+    
     @Published private var emojiArtModel: EmojiArtModel
     var emojiartModelSink: AnyCancellable?
     
     @Published private(set) var backgroundImage: UIImage?
     var emojis: [EmojiArtModel.Emoji] { emojiArtModel.emojis }
-
+    
+    @Published var timeSpent: Int = 0
+    private var timer: Publishers.Autoconnect<Timer.TimerPublisher>? = nil
+    private var subscription: AnyCancellable? = nil
+    
     var backgroundURL: URL? {
         get {
             emojiArtModel.backgroundURL
@@ -29,7 +33,7 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
             fetchBackgroundImageData()
         }
     }
-
+    
     
     init(id:UUID = UUID()) {
         self.id = id
@@ -42,12 +46,32 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
         }
         fetchBackgroundImageData()
     }
-
+    
+    
+    func startTimeTracker(){
+        timeSpent = UserDefaults.standard.integer(forKey: "EmojiArtDocumentViewModel.\(id).timeSpent")
+        print("Starting/Resuming timer at \(timeSpent) s")
+        timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+        subscription = timer?.sink(receiveValue: { _ in
+            self.updateTimeSpent()
+        })
+    }
+    
+    func stopTimeTracker(){
+        print("Stopping timer at \(timeSpent) s")
+        UserDefaults.standard.set(timeSpent, forKey: "EmojiArtDocumentViewModel.\(id).timeSpent")
+        self.timer?.upstream.connect().cancel()
+    }
+    
+    func updateTimeSpent(){
+        timeSpent += 1
+    }
+    
     // MARK: - Intents
     func addEmoji(_ emoji: String, at location: CGPoint, size: CGFloat) {
         emojiArtModel.addEmoji(emoji, x: Int(location.x), y: Int(location.y), size: Int(size))
     }
-
+    
     private var fetchImageSink: AnyCancellable?
     private func fetchBackgroundImageData() {
         fetchImageSink?.cancel()
