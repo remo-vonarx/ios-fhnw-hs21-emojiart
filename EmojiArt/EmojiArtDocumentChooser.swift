@@ -66,7 +66,7 @@ struct EmojiArtDocumentChooser: View {
     }
 
     private func createEmojiArtWallView() -> some View {
-        return EmojiArtWallView(documents: store.documents)
+        return EmojiArtWallView(store: store)
             .navigationTitle("Emoji Art Wall")
     }
 }

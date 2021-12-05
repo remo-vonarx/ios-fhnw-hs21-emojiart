@@ -8,41 +8,44 @@
 import SwiftUI
 
 struct EmojiArtWallView: View {
+    var store: EmojiArtDocumentStore
     
-    var documents: [EmojiArtDocumentViewModel]
-    
-    
-    init(documents: [EmojiArtDocumentViewModel]) {
-        self.documents = documents
+    init(store: EmojiArtDocumentStore) {
+        self.store = store
     }
     
-    let rows = [
-        GridItem(.fixed(33)),
-        GridItem(.fixed(33)),
-        GridItem(.fixed(33)),
-
+    let columns = [
+        GridItem(.flexible(minimum: 50)),
+        GridItem(.flexible(minimum: 50)),
     ]
     
-    // MARK: - Zooming
-    @State private var steadyZoomScale: CGFloat = 0.3
-    @GestureState private var gestureZoomScale: CGFloat = 0.3
-    private var zoomScale: CGFloat {
-        steadyZoomScale * gestureZoomScale
-    }
-    
     var body: some View {
-        ScrollView {
-            LazyHGrid(rows: rows, alignment: .center){
-                ForEach(documents, id: \.self) { item in
-                    if let image = item.backgroundImage {
-                        Image(uiImage: image)
-                            .scaleEffect(zoomScale)
-                        Text(item.id.uuidString)
-                    } else{
-                        Text("No background image")
+        ScrollView(.vertical) {
+            LazyVGrid(columns: columns, alignment: .center) {
+                ForEach(store.documents, id: \.self) { document in
+                    let name = store.name(for: document)
+                    let emojiArtDocumentView = EmojiArtDocumentView(document: document)
+                        .navigationTitle(name)
+                    NavigationLink(destination: emojiArtDocumentView) {
+                        createPreviewForDocument(document: document, documentName: name)
                     }
                 }
+            }.padding(10)
+        }
+    }
+    
+    fileprivate func createPreviewForDocument(document: EmojiArtDocumentViewModel, documentName: String) -> some View {
+        VStack {
+            if let image = document.backgroundImage {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(1, contentMode: .fit)
+            } else {
+                Rectangle()
+                    .foregroundColor(.gray)
+                    .aspectRatio(1, contentMode: .fit)
             }
+            Text(documentName)
         }
     }
 }
