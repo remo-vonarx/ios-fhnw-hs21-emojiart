@@ -20,8 +20,9 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
     @Published private(set) var backgroundImage: UIImage?
     var emojis: [EmojiArtModel.Emoji] { emojiArtModel.emojis }
     
+    // TODO: Timer schould be in Model if possible
     @Published var timeSpent: Int = 0
-    private var timer: Publishers.Autoconnect<Timer.TimerPublisher>? = nil
+    @Published private var timer: Publishers.Autoconnect<Timer.TimerPublisher>? = nil
     private var subscription: AnyCancellable? = nil
     
     var backgroundURL: URL? {

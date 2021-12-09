@@ -27,14 +27,14 @@ struct EmojiArtDocumentView: View {
             .gesture(panGesture())
             .gesture(zoomGesture())
             .clipped()
+            .onAppear{
+                document.startTimeTracker()
+            }
+            .onDisappear{
+                document.stopTimeTracker()
+            }
             
             createTimeTracker()
-        }.onAppear{
-            document.startTimeTracker()
-            //TODO: this does not work yet as it is not called every time :(
-        }
-        .onDisappear{
-            document.stopTimeTracker()
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
