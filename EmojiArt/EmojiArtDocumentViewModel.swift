@@ -20,9 +20,9 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
     @Published private(set) var backgroundImage: UIImage?
     var emojis: [EmojiArtModel.Emoji] { emojiArtModel.emojis }
     
-    // TODO: Timer schould be in Model if possible
-    @Published var timeSpent: Int = 0
-    @Published private var timer: Publishers.Autoconnect<Timer.TimerPublisher>? = nil
+    // TODO: timer not stopping while app inactive or closed
+    // TODO: when more than 1 project -> problem with counting sometimes
+    private var timer: Publishers.Autoconnect<Timer.TimerPublisher>? = nil
     private var subscription: AnyCancellable? = nil
     
     var backgroundURL: URL? {
@@ -50,8 +50,7 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
     
     
     func startTimeTracker(){
-        timeSpent = UserDefaults.standard.integer(forKey: "EmojiArtDocumentViewModel.\(id).timeSpent")
-        print("Starting/Resuming timer at \(timeSpent) s")
+        print("Starting/Resuming timer at \(emojiArtModel.timeSpent) s")
         timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
         subscription = timer?.sink(receiveValue: { _ in
             self.updateTimeSpent()
@@ -59,13 +58,18 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
     }
     
     func stopTimeTracker(){
-        print("Stopping timer at \(timeSpent) s")
-        UserDefaults.standard.set(timeSpent, forKey: "EmojiArtDocumentViewModel.\(id).timeSpent")
+        print("Stopping timer at \(emojiArtModel.timeSpent) s")
+        subscription?.cancel()
         self.timer?.upstream.connect().cancel()
     }
     
+    func getTime()->Int{
+        emojiArtModel.timeSpent
+    }
+    
     func updateTimeSpent(){
-        timeSpent += 1
+        emojiArtModel.timeSpent += 1
+        UserDefaults.standard.set(emojiArtModel.timeSpent, forKey: "EmojiArtDocumentViewModel.\(id).timeSpent")
     }
     
     // MARK: - Intents

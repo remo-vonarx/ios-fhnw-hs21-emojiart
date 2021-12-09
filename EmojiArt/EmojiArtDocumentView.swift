@@ -27,11 +27,12 @@ struct EmojiArtDocumentView: View {
             .gesture(panGesture())
             .gesture(zoomGesture())
             .clipped()
+            .onDisappear{
+                // TODO: not working properly
+                document.stopTimeTracker()
+            }
             .onAppear{
                 document.startTimeTracker()
-            }
-            .onDisappear{
-                document.stopTimeTracker()
             }
             
             createTimeTracker()
@@ -56,7 +57,7 @@ struct EmojiArtDocumentView: View {
     
     private func createTimeTracker() -> some View {
         return HStack{
-            Label("\(document.timeSpent) s", systemImage: "timer")
+            Label("\(document.getTime()) s", systemImage: "timer")
         }
     }
     
