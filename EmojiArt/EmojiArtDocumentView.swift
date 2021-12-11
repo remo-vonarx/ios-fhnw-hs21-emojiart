@@ -46,7 +46,7 @@ struct EmojiArtDocumentView: View {
                     Image(systemName: "eyedropper").imageScale(.large)
                 }
                 .sheet(isPresented: $isColorPickerEditorPresented) {
-                    ColorPickerEditor(document: document)
+                    ColorPickerEditor(document: document,backgroundColor: document.backgroundColor,opacity: document.opacity)
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
