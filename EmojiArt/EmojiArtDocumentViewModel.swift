@@ -24,8 +24,31 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
     // TODO: when more than 1 project -> problem with counting sometimes
     private var timer: Publishers.Autoconnect<Timer.TimerPublisher>?
     private var subscription: AnyCancellable?
-    var backgroundColor = Color.white
-    var opacity: Double = 1
+
+    var backgroundColor: Color {
+        get {
+            let color = emojiArtModel.backgroundColor
+            return Color(UIColor(red: CGFloat(color[0]), green: CGFloat(color[1]), blue: CGFloat(color[2]), alpha: CGFloat(color[3])))
+        }
+        set {
+            var red: CGFloat = 0
+            var green: CGFloat = 0
+            var blue: CGFloat = 0
+            var alpha: CGFloat = 0
+            UIColor(newValue).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+
+            emojiArtModel.backgroundColor = [Float(red), Float(green), Float(blue), Float(alpha)]
+        }
+    }
+
+    var opacity: Double {
+        get {
+            emojiArtModel.opacity
+        }
+        set {
+            emojiArtModel.opacity = newValue
+        }
+    }
 
     var backgroundURL: URL? {
         get {

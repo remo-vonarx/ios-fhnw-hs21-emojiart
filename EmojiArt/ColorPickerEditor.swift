@@ -30,7 +30,7 @@ struct ColorPickerEditor: View {
                     document.backgroundColor = backgroundColor
                     document.opacity = opacity
                 }) {
-                    Text("Done")
+                    Text("Save")
                 }
             }
         }

@@ -2,6 +2,8 @@ import Foundation
 
 struct EmojiArtModel: Codable {
     var backgroundURL: URL?
+    var backgroundColor: [Float] = [1, 1, 1, 1]
+    var opacity: Double = 1
     var timeSpent: Int = 0
     var emojis = [Emoji]()
 
