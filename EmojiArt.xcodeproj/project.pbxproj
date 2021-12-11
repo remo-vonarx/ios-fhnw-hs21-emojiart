@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A67353322764E911003BBFA7 /* ColorPickerEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A67353312764E911003BBFA7 /* ColorPickerEditor.swift */; };
 		A678AA64273F3672006A72C1 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A678AA63273F3672006A72C1 /* Launch Screen.storyboard */; };
 		A68580AD27465B7500CBA4B8 /* PaletteChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68580AC27465B7500CBA4B8 /* PaletteChooser.swift */; };
 		A68580AF27465D5300CBA4B8 /* EmojiArtDocumentViewModel+Palette.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68580AE27465D5300CBA4B8 /* EmojiArtDocumentViewModel+Palette.swift */; };
@@ -45,6 +46,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A67353312764E911003BBFA7 /* ColorPickerEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerEditor.swift; sourceTree = "<group>"; };
 		A678AA63273F3672006A72C1 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		A68580AC27465B7500CBA4B8 /* PaletteChooser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteChooser.swift; sourceTree = "<group>"; };
 		A68580AE27465D5300CBA4B8 /* EmojiArtDocumentViewModel+Palette.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "EmojiArtDocumentViewModel+Palette.swift"; sourceTree = "<group>"; };
@@ -128,6 +130,7 @@
 				A6CA73DF274FCD3900AE61D8 /* EmojiArtDocumentStore.swift */,
 				A68580AC27465B7500CBA4B8 /* PaletteChooser.swift */,
 				A6CA73DD274FB8AB00AE61D8 /* PaletteEditor.swift */,
+				A67353312764E911003BBFA7 /* ColorPickerEditor.swift */,
 				A6C6B8B5275960EB00673643 /* EmojiArtWallView.swift */,
 				DEF3E4FA272AEFAE00A93527 /* Assets.xcassets */,
 				DEF3E4FC272AEFAE00A93527 /* Preview Content */,
@@ -292,6 +295,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A6EF5EB22754167200559609 /* EditableText.swift in Sources */,
+				A67353322764E911003BBFA7 /* ColorPickerEditor.swift in Sources */,
 				DEF3E527272AF08800A93527 /* EmojiArtModel.swift in Sources */,
 				DEF3E525272AF06100A93527 /* EmojiArtDocumentView.swift in Sources */,
 				DEF3E4F7272AEFAB00A93527 /* EmojiArtApp.swift in Sources */,

@@ -3,17 +3,18 @@ import SwiftUI
 struct EmojiArtDocumentView: View {
     @ObservedObject var document: EmojiArtDocumentViewModel
     @State private var chosenPalette: String
+    @State private var isColorPickerEditorPresented = false
     @State private var isPastingExplanationPresented = false
-    
+
     init(document: EmojiArtDocumentViewModel) {
         self.document = document
         chosenPalette = document.defaultPalette
     }
-    
+
     private var isLoading: Bool {
         document.backgroundImage == nil && document.backgroundURL != nil
     }
-    
+
     var body: some View {
         VStack {
             createPalette()
@@ -23,21 +24,31 @@ struct EmojiArtDocumentView: View {
                     createEmojiLayer(geometry: geometry)
                 }
                 .gesture(doubleTapGesture(in: geometry))
+                .onDisappear {
+                    // TODO: not working properly
+                    document.stopTimeTracker()
+                }
+                .onAppear {
+                    document.startTimeTracker()
+                }
             }
             .gesture(panGesture())
             .gesture(zoomGesture())
             .clipped()
-            .onDisappear{
-                // TODO: not working properly
-                document.stopTimeTracker()
-            }
-            .onAppear{
-                document.startTimeTracker()
-            }
-            
+
             createTimeTracker()
         }
         .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    isColorPickerEditorPresented = true
+                }) {
+                    Image(systemName: "eyedropper").imageScale(.large)
+                }
+                .sheet(isPresented: $isColorPickerEditorPresented) {
+                    ColorPickerEditor(document: document)
+                }
+            }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
                     if let url = UIPasteboard.general.url {
@@ -53,14 +64,27 @@ struct EmojiArtDocumentView: View {
                 }
             }
         }
+        // handle app states to stop and start timer
+        .onChange(of: UIApplication.shared.applicationState) { phase in
+            switch phase {
+            case .active:
+                document.startTimeTracker()
+            case .inactive:
+                document.stopTimeTracker()
+            case .background:
+                document.stopTimeTracker()
+            @unknown default:
+                document.stopTimeTracker()
+            }
+        }
     }
-    
+
     private func createTimeTracker() -> some View {
-        return HStack{
+        return HStack {
             Label("\(document.getTime()) s", systemImage: "timer")
         }
     }
-    
+
     private func createPalette() -> some View {
         return HStack {
             PaletteChooser(document: document, chosenPalette: $chosenPalette)
@@ -75,9 +99,9 @@ struct EmojiArtDocumentView: View {
             }
         }.padding(.horizontal)
     }
-    
+
     private func createBackground(geometry: GeometryProxy) -> some View {
-        return Color.white.overlay(
+        return document.backgroundColor.overlay(
             Group {
                 if let image = document.backgroundImage {
                     Image(uiImage: image)
@@ -86,15 +110,16 @@ struct EmojiArtDocumentView: View {
                 }
             }
         )
-            .edgesIgnoringSafeArea([.horizontal, .bottom])
-            .onDrop(of: [.url, .plainText, .image], isTargeted: nil) { providers, location in
-                return drop(providers: providers, location: location, geometry: geometry)
-            }
-            .onReceive(document.$backgroundImage) { backgroundImage in
-                zoomToFit(backgroundImage: backgroundImage, in: geometry)
-            }
+        .opacity(document.opacity)
+        .edgesIgnoringSafeArea([.horizontal, .bottom])
+        .onDrop(of: [.url, .plainText, .image], isTargeted: nil) { providers, location in
+            drop(providers: providers, location: location, geometry: geometry)
+        }
+        .onReceive(document.$backgroundImage) { backgroundImage in
+            zoomToFit(backgroundImage: backgroundImage, in: geometry)
+        }
     }
-    
+
     private func createEmojiLayer(geometry: GeometryProxy) -> some View {
         Group {
             if isLoading {
@@ -108,7 +133,7 @@ struct EmojiArtDocumentView: View {
             }
         }
     }
-    
+
     private func drop(providers: [NSItemProvider], location: CGPoint, geometry: GeometryProxy) -> Bool {
         var isDropHandled = providers.loadObjects(ofType: URL.self) { url in
             document.backgroundURL = url
@@ -121,19 +146,20 @@ struct EmojiArtDocumentView: View {
         }
         return isDropHandled
     }
-    
+
     private func font(for emoji: EmojiArtModel.Emoji) -> Font {
         let fontSize = emoji.fontSize * zoomScale
         return Font.system(size: fontSize)
     }
-    
+
     // MARK: - Panning
+
     @State private var steadyPanOffset: CGSize = .zero
     @GestureState private var gesturePanOffset: CGSize = .zero
     private var panOffset: CGSize {
         steadyPanOffset + gesturePanOffset
     }
-    
+
     private func panGesture() -> some Gesture {
         DragGesture()
             .updating($gesturePanOffset, body: { latestDragGestureValue, gesturePanOffset, _ in
@@ -143,14 +169,15 @@ struct EmojiArtDocumentView: View {
                 steadyPanOffset = panOffset + finalDragGestureValue.translation
             }
     }
-    
+
     // MARK: - Zooming
+
     @State private var steadyZoomScale: CGFloat = 1.0
     @GestureState private var gestureZoomScale: CGFloat = 1.0
     private var zoomScale: CGFloat {
         steadyZoomScale * gestureZoomScale
     }
-    
+
     private func zoomGesture() -> some Gesture {
         MagnificationGesture()
             .updating($gestureZoomScale, body: { magnifyBy, gestureZoomScale, _ in
@@ -160,14 +187,14 @@ struct EmojiArtDocumentView: View {
                 steadyZoomScale *= finalDragGestureValue
             }
     }
-    
+
     private func doubleTapGesture(in geometry: GeometryProxy) -> some Gesture {
         TapGesture(count: 2)
             .onEnded {
                 zoomToFit(backgroundImage: document.backgroundImage, in: geometry)
             }
     }
-    
+
     private func zoomToFit(backgroundImage: UIImage?, in geometry: GeometryProxy) {
         if let image = backgroundImage {
             let horizontalZoom = geometry.size.width / image.size.width
@@ -176,8 +203,9 @@ struct EmojiArtDocumentView: View {
             steadyZoomScale = min(horizontalZoom, verticalZoom)
         }
     }
-    
+
     // MARK: - Positioning & Sizing Emojis
+
     private func toCanvasCoordinate(from emojiCoordinate: CGPoint, in geometry: GeometryProxy) -> CGPoint {
         let center = geometry.frame(in: .local).center
         return CGPoint(
@@ -185,7 +213,7 @@ struct EmojiArtDocumentView: View {
             y: center.y + emojiCoordinate.y * zoomScale + panOffset.height
         )
     }
-    
+
     private func toEmojiCoordinate(from canvasCoordinate: CGPoint, in geometry: GeometryProxy) -> CGPoint {
         let center = geometry.frame(in: .local).center
         return CGPoint(
@@ -193,7 +221,8 @@ struct EmojiArtDocumentView: View {
             y: (canvasCoordinate.y - center.y - panOffset.height) / zoomScale
         )
     }
-    
+
     // MARK: - Drawing constants
+
     private let defaultEmojiSize: CGFloat = 40
 }

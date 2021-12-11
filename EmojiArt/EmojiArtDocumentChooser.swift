@@ -49,18 +49,13 @@ struct EmojiArtDocumentChooser: View {
                         Image(systemName: "square.grid.2x2.fill").imageScale(.large)
                     }
                 }
-                ToolbarItem(placement: .navigationBarLeading) {
-                    NavigationLink(destination: colorBackground()) {
-                        Image(systemName: "eyedropper").imageScale(.large)
-                    }
-                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
             }
             .environment(\.editMode, $editMode)
 
-//            createInitialDetailView()
+            createInitialDetailView()
         }
     }
 
@@ -71,11 +66,6 @@ struct EmojiArtDocumentChooser: View {
     }
 
     private func createEmojiArtWallView() -> some View {
-        return EmojiArtWallView(store: store)
-            .navigationTitle("Emoji Art Wall")
-    }
-    
-    private func colorBackground() -> some View {
         return EmojiArtWallView(store: store)
             .navigationTitle("Emoji Art Wall")
     }

@@ -5,26 +5,28 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
     static func == (lhs: EmojiArtDocumentViewModel, rhs: EmojiArtDocumentViewModel) -> Bool {
         lhs.id == rhs.id
     }
-    
-    func hash(into hasher: inout Hasher){
+
+    func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
-    
+
     let id: UUID
-    
+
     static let palette: String = "🐶🐱🐹🐰🦊🐼🐨🐯🐸🐵🐧🐦🐤🦆🦅🦇🐺"
-    
+
     @Published private var emojiArtModel: EmojiArtModel
     var emojiartModelSink: AnyCancellable?
-    
+
     @Published private(set) var backgroundImage: UIImage?
     var emojis: [EmojiArtModel.Emoji] { emojiArtModel.emojis }
-    
+
     // TODO: timer not stopping while app inactive or closed
     // TODO: when more than 1 project -> problem with counting sometimes
-    private var timer: Publishers.Autoconnect<Timer.TimerPublisher>? = nil
-    private var subscription: AnyCancellable? = nil
-    
+    private var timer: Publishers.Autoconnect<Timer.TimerPublisher>?
+    private var subscription: AnyCancellable?
+    var backgroundColor = Color.white
+    var opacity: Double = 1
+
     var backgroundURL: URL? {
         get {
             emojiArtModel.backgroundURL
@@ -34,49 +36,48 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
             fetchBackgroundImageData()
         }
     }
-    
-    
-    init(id:UUID = UUID()) {
+
+    init(id: UUID = UUID()) {
         self.id = id
         let emojiArtDocumentKey = "EmojiArtDocumentViewModel.Untitled\(id)"
         let emojiArtJson = UserDefaults.standard.data(forKey: emojiArtDocumentKey)
         emojiArtModel = EmojiArtModel(json: emojiArtJson) ?? EmojiArtModel()
         emojiartModelSink = $emojiArtModel.sink { emojiArtModel in
-            print("JSON: \(emojiArtModel.json?.utf8 ?? "nil")")
+            // print("JSON: \(emojiArtModel.json?.utf8 ?? "nil")")
             UserDefaults.standard.set(emojiArtModel.json, forKey: emojiArtDocumentKey)
         }
         fetchBackgroundImageData()
     }
-    
-    
-    func startTimeTracker(){
+
+    func startTimeTracker() {
         print("Starting/Resuming timer at \(emojiArtModel.timeSpent) s")
         timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
         subscription = timer?.sink(receiveValue: { _ in
             self.updateTimeSpent()
         })
     }
-    
-    func stopTimeTracker(){
+
+    func stopTimeTracker() {
         print("Stopping timer at \(emojiArtModel.timeSpent) s")
         subscription?.cancel()
-        self.timer?.upstream.connect().cancel()
+        timer?.upstream.connect().cancel()
     }
-    
-    func getTime()->Int{
+
+    func getTime() -> Int {
         emojiArtModel.timeSpent
     }
-    
-    func updateTimeSpent(){
+
+    func updateTimeSpent() {
         emojiArtModel.timeSpent += 1
         UserDefaults.standard.set(emojiArtModel.timeSpent, forKey: "EmojiArtDocumentViewModel.\(id).timeSpent")
     }
-    
+
     // MARK: - Intents
+
     func addEmoji(_ emoji: String, at location: CGPoint, size: CGFloat) {
         emojiArtModel.addEmoji(emoji, x: Int(location.x), y: Int(location.y), size: Int(size))
     }
-    
+
     private var fetchImageSink: AnyCancellable?
     private func fetchBackgroundImageData() {
         fetchImageSink?.cancel()
