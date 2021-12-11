@@ -11,12 +11,12 @@ struct ColorPickerEditor: View {
     @ObservedObject var document: EmojiArtDocumentViewModel
     @State var backgroundColor: Color
     @State var opacity: Double
-    
+
     @Environment(\.presentationMode) var presentation
 
     var body: some View {
         VStack {
-            HStack{
+            HStack {
                 Spacer()
                 Text("Background Color Editor")
                     .font(.headline)
@@ -33,7 +33,7 @@ struct ColorPickerEditor: View {
                     .onChange(of: backgroundColor) { newValue in
                         document.backgroundColor = newValue
                     }
-                HStack{
+                HStack {
                     Text("Opacity of background")
                     Spacer()
                     Slider(value: $opacity)
