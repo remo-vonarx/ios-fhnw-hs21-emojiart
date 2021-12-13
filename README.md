@@ -12,4 +12,4 @@
 * 20.01.2022 23:59
 
 ### Aufgaben-Checkliste
-- tbd
+- 2
