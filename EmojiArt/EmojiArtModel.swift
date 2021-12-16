@@ -2,7 +2,7 @@ import Foundation
 
 struct EmojiArtModel: Codable {
     var backgroundURL: URL?
-    var backgroundColor: [Float] = [1, 1, 1, 1]
+    var backgroundColor = ColorRgbModel(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
     var opacity: Double = 1
     var timeSpent: Int = 0
     var emojis = [Emoji]()

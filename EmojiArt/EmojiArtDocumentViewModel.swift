@@ -27,8 +27,7 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
 
     var backgroundColor: Color {
         get {
-            let color = emojiArtModel.backgroundColor
-            return Color(UIColor(red: CGFloat(color[0]), green: CGFloat(color[1]), blue: CGFloat(color[2]), alpha: CGFloat(color[3])))
+            return Color(UIColor(red: CGFloat(emojiArtModel.backgroundColor.red), green: CGFloat(emojiArtModel.backgroundColor.green), blue: CGFloat(emojiArtModel.backgroundColor.blue), alpha: CGFloat(emojiArtModel.backgroundColor.alpha)))
         }
         set {
             var red: CGFloat = 0
@@ -37,7 +36,10 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
             var alpha: CGFloat = 0
             UIColor(newValue).getRed(&red, green: &green, blue: &blue, alpha: &alpha)
 
-            emojiArtModel.backgroundColor = [Float(red), Float(green), Float(blue), Float(alpha)]
+            emojiArtModel.backgroundColor.red = Float(red)
+            emojiArtModel.backgroundColor.green = Float(green)
+            emojiArtModel.backgroundColor.blue = Float(blue)
+            emojiArtModel.backgroundColor.alpha = Float(alpha)
         }
     }
 

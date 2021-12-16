@@ -25,7 +25,7 @@ struct EmojiArtDocumentView: View {
                 }
                 .gesture(doubleTapGesture(in: geometry))
                 .onDisappear {
-                    // TODO: not working properly
+                    // TODO: not working properly not counting up after bg reactiviting app
                     document.stopTimeTracker()
                 }
                 .onAppear {
@@ -69,12 +69,10 @@ struct EmojiArtDocumentView: View {
             switch phase {
             case .active:
                 document.startTimeTracker()
-            case .inactive:
-                document.stopTimeTracker()
-            case .background:
+            case .inactive, .background:
                 document.stopTimeTracker()
             @unknown default:
-                document.stopTimeTracker()
+                print("default")
             }
         }
     }
