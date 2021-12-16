@@ -12,7 +12,7 @@ struct EmojiArtDocumentChooser: View {
     @State private var editMode = EditMode.inactive
 
     private var initialDetailView: some View {
-        let document = store.documents.first ?? EmojiArtDocumentViewModel()
+        let document = store.documents.first ?? store.addDocument()
         return EmojiArtDocumentView(document: document)
             .navigationTitle(store.name(for: document))
     }
@@ -28,6 +28,14 @@ struct EmojiArtDocumentChooser: View {
                             store.setName(name, for: document)
                         })
                     }
+
+                    // TODO: works for timer but breaks nav function
+//                    .simultaneousGesture(TapGesture().onEnded {
+//                        store.documents.forEach { doc in
+//                            doc.stopTimeTracker()
+//                        }
+//                        document.startTimeTracker()
+//                    })
                 }
                 .onDelete { indexSet in
                     indexSet
