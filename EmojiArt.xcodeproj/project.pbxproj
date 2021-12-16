@@ -127,16 +127,16 @@
 				DEF3E522272AF04B00A93527 /* EmojiArtDocumentViewModel.swift */,
 				A68580AE27465D5300CBA4B8 /* EmojiArtDocumentViewModel+Palette.swift */,
 				DEF3E520272AEFBA00A93527 /* EmojiArtExtensions.swift */,
+				A6CA73DF274FCD3900AE61D8 /* EmojiArtDocumentStore.swift */,
+				A6C6B8B5275960EB00673643 /* EmojiArtWallView.swift */,
 				DEF3E4F6272AEFAB00A93527 /* EmojiArtApp.swift */,
 				A6F0931F2754366F00488909 /* EmojiArtDocumentChooser.swift */,
-				A6CA73DF274FCD3900AE61D8 /* EmojiArtDocumentStore.swift */,
 				A68580AC27465B7500CBA4B8 /* PaletteChooser.swift */,
 				A6CA73DD274FB8AB00AE61D8 /* PaletteEditor.swift */,
 				A67353312764E911003BBFA7 /* ColorPickerEditor.swift */,
-				A6C6B8B5275960EB00673643 /* EmojiArtWallView.swift */,
+				A68F6A88276B62C5009DA50D /* ColorRgbModal.swift */,
 				DEF3E4FA272AEFAE00A93527 /* Assets.xcassets */,
 				DEF3E4FC272AEFAE00A93527 /* Preview Content */,
-				A68F6A88276B62C5009DA50D /* ColorRgbModal.swift */,
 			);
 			path = EmojiArt;
 			sourceTree = "<group>";

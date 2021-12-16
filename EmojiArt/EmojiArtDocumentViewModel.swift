@@ -94,6 +94,7 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
 
     func updateTimeSpent() {
         emojiArtModel.timeSpent += 1
+        print("---> \(emojiArtModel.timeSpent) s")
         UserDefaults.standard.set(emojiArtModel.timeSpent, forKey: "EmojiArtDocumentViewModel.\(id).timeSpent")
     }
 

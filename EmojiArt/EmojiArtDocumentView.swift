@@ -24,13 +24,14 @@ struct EmojiArtDocumentView: View {
                     createEmojiLayer(geometry: geometry)
                 }
                 .gesture(doubleTapGesture(in: geometry))
-                .onDisappear {
-                    // TODO: not working properly not counting up after bg reactiviting app
-                    document.stopTimeTracker()
-                }
-                .onAppear {
-                    document.startTimeTracker()
-                }
+//                .onDisappear {
+//                    // TODO: not working properly not counting up after bg reactiviting app
+//                    // TODO: after ca 5 doc changes counting multiple timers up
+//                    document.stopTimeTracker()
+//                }
+//                .onAppear {
+//                    document.startTimeTracker()
+//                }
             }
             .gesture(panGesture())
             .gesture(zoomGesture())
