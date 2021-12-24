@@ -26,14 +26,6 @@ struct EmojiArtDocumentView: View {
                     createEmojiLayer(geometry: geometry)
                 }
                 .gesture(doubleTapGesture(in: geometry))
-//                .onDisappear {
-//                    // TODO: not working properly not counting up after bg reactiviting app
-//                    // TODO: after ca 5 doc changes counting multiple timers up
-//                    document.stopTimeTracker()
-//                }
-//                .onAppear {
-//                    document.startTimeTracker()
-//                }
             }
             .gesture(panGesture())
             .gesture(zoomGesture())
@@ -67,45 +59,32 @@ struct EmojiArtDocumentView: View {
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
-                           HStack {
-                               Button {
-                                   imagePickerSourceType = .photoLibrary
-                                   isImagePickerPresented = true
-                               } label: {
-                                   Image(systemName: "photo").imageScale(.large)
-                               }
-                               if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                                   Button {
-                                       imagePickerSourceType = .camera
-                                       isImagePickerPresented = true
-                                   } label: {
-                                       Image(systemName: "camera").imageScale(.large)
-                                   }
-                               }
-                           }
-                           .sheet(isPresented: $isImagePickerPresented) {
-                               ImagePicker(sourceType: imagePickerSourceType) { image in
-                                   if let image = image {
-                                       DispatchQueue.main.async { // Update view instantly, store file async
-                                           document.backgroundURL = image.storeInFilesystem()
-                                       }
-                                   }
-                                   isImagePickerPresented = false
-                               }
-                           }
-
-                       }
-        }
-        
-        // handle app states to stop and start timer
-        .onChange(of: UIApplication.shared.applicationState) { phase in
-            switch phase {
-            case .active:
-                document.startTimeTracker()
-            case .inactive, .background:
-                document.stopTimeTracker()
-            @unknown default:
-                print("default")
+                HStack {
+                    Button {
+                        imagePickerSourceType = .photoLibrary
+                        isImagePickerPresented = true
+                    } label: {
+                        Image(systemName: "photo").imageScale(.large)
+                    }
+                    if UIImagePickerController.isSourceTypeAvailable(.camera) {
+                        Button {
+                            imagePickerSourceType = .camera
+                            isImagePickerPresented = true
+                        } label: {
+                            Image(systemName: "camera").imageScale(.large)
+                        }
+                    }
+                }
+                .sheet(isPresented: $isImagePickerPresented) {
+                    ImagePicker(sourceType: imagePickerSourceType) { image in
+                        if let image = image {
+                            DispatchQueue.main.async { // Update view instantly, store file async
+                                document.backgroundURL = image.storeInFilesystem()
+                            }
+                        }
+                        isImagePickerPresented = false
+                    }
+                }
             }
         }
     }

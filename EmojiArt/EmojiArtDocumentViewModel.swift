@@ -20,11 +20,9 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
     @Published private(set) var backgroundImage: UIImage?
     var emojis: [EmojiArtModel.Emoji] { emojiArtModel.emojis }
 
-    // TODO: timer not stopping while app inactive or closed
-    // TODO: when more than 1 project -> problem with counting sometimes
     private var timer: Publishers.Autoconnect<Timer.TimerPublisher>?
     private var subscription: AnyCancellable?
-
+    
     var backgroundColor: Color {
         get {
             return Color(UIColor(red: CGFloat(emojiArtModel.backgroundColor.red), green: CGFloat(emojiArtModel.backgroundColor.green), blue: CGFloat(emojiArtModel.backgroundColor.blue), alpha: CGFloat(emojiArtModel.backgroundColor.alpha)))
@@ -61,6 +59,7 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
             fetchBackgroundImageData()
         }
     }
+    
 
     init(id: UUID = UUID()) {
         self.id = id
