@@ -29,7 +29,7 @@ struct ColorPickerEditor: View {
                 }.padding()
             }
             Form {
-                ColorPicker("Backgroundcolor", selection: $backgroundColor)
+                ColorPicker("Background color", selection: $backgroundColor)
                     .onChange(of: backgroundColor) { newValue in
                         document.backgroundColor = newValue
                     }
