@@ -171,3 +171,9 @@ extension UIImage {
         return url
     }
 }
+
+extension Font {
+    init(uiFont: UIFont) {
+        self = Font(uiFont as CTFont)
+    }
+}
