@@ -85,6 +85,7 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
         print("Stopping timer at \(emojiArtModel.timeSpent) s")
         subscription?.cancel()
         timer?.upstream.connect().cancel()
+        UserDefaults.standard.set(emojiArtModel.timeSpent, forKey: "EmojiArtDocumentViewModel.\(id).timeSpent")
     }
 
     func getTime() -> Int {
@@ -93,8 +94,6 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
 
     func updateTimeSpent() {
         emojiArtModel.timeSpent += 1
-        print("---> \(emojiArtModel.timeSpent) s")
-        UserDefaults.standard.set(emojiArtModel.timeSpent, forKey: "EmojiArtDocumentViewModel.\(id).timeSpent")
     }
 
     // MARK: - Intents

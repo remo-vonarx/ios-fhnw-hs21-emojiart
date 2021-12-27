@@ -86,12 +86,28 @@ struct EmojiArtDocumentView: View {
                     }
                 }
             }
-        }
+        }.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification), perform: { output in
+            document.startTimeTracker()
+            print("\(document.id): I've got re-opened")
+        }).onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification), perform: { output in
+            document.stopTimeTracker()
+            print("\(document.id): I've entered background")
+        }).onReceive(NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification), perform: { output in
+            document.stopTimeTracker()
+            print("\(document.id): I've got terminated")
+        })
     }
 
     private func createTimeTracker() -> some View {
         return HStack {
             Label("\(document.getTime()) s", systemImage: "timer")
+        }.onAppear{
+            document.startTimeTracker()
+            print("\(document.id): I've appeared")
+        }
+        .onDisappear{
+            document.stopTimeTracker()
+            print("\(document.id): I've disappeared")
         }
     }
 
