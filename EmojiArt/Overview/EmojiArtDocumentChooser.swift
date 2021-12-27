@@ -78,10 +78,12 @@ struct EmojiArtDocumentChooser: View {
         let document = store.documents.first ?? store.addDocument()
         return EmojiArtDocumentView(document: document)
             .navigationTitle(store.name(for: document))
+            .environment(\.font, customFont)
     }
 
     private func createEmojiArtWallView() -> some View {
         return EmojiArtWallView(store: store)
             .navigationTitle("Emoji Art Wall")
+            .environment(\.font, customFont)
     }
 }

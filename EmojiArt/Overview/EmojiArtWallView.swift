@@ -9,7 +9,8 @@ import SwiftUI
 
 struct EmojiArtWallView: View {
     var store: EmojiArtDocumentStore
-    
+    @Environment(\.font) private var customFont: Font?
+
     init(store: EmojiArtDocumentStore) {
         self.store = store
     }
@@ -19,6 +20,8 @@ struct EmojiArtWallView: View {
         GridItem(.flexible(minimum: 50)),
     ]
     
+
+    
     var body: some View {
         ScrollView(.vertical) {
             LazyVGrid(columns: columns, alignment: .center) {
@@ -26,9 +29,10 @@ struct EmojiArtWallView: View {
                     let name = store.name(for: document)
                     let emojiArtDocumentView = EmojiArtDocumentView(document: document)
                         .navigationTitle(name)
+                        .font(customFont)
                     NavigationLink(destination: emojiArtDocumentView) {
                         createPreviewForDocument(document: document, documentName: name)
-                    }
+                    }.font(customFont)
                 }
             }.padding(10)
         }
@@ -45,7 +49,7 @@ struct EmojiArtWallView: View {
                     .foregroundColor(.gray)
                     .aspectRatio(1, contentMode: .fit)
             }
-            Text(documentName)
+            Text(documentName).font(customFont)
         }
     }
 }
