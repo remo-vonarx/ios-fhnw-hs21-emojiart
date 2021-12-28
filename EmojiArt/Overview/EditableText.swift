@@ -7,6 +7,8 @@ struct EditableText: View {
 
     @State private var editableText: String = ""
 
+    @Environment(\.font) private var customFont: Font?
+
     init(_ text: String, isEditing: Bool, onChanged: @escaping (String) -> Void) {
         self.text = text
         self.isEditing = isEditing
@@ -16,12 +18,12 @@ struct EditableText: View {
     var body: some View {
         Group {
             if isEditing {
-                TextField(text, text: $editableText)
-                    .onChange(of: editableText) { text in
+                TextField(text, text: $editableText).font(customFont)
+                    .onChange(of: editableText) { _ in
                         onChanged(editableText)
                     }
             } else {
-                Text(text)
+                Text(text).font(customFont)
             }
         }
         .onAppear { self.editableText = self.text }

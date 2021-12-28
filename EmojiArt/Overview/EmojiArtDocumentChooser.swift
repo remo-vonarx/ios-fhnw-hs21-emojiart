@@ -10,12 +10,8 @@ import SwiftUI
 struct EmojiArtDocumentChooser: View {
     @ObservedObject var store: EmojiArtDocumentStore
     @State private var editMode = EditMode.inactive
-
-    private var initialDetailView: some View {
-        let document = store.documents.first ?? store.addDocument()
-        return EmojiArtDocumentView(document: document)
-            .navigationTitle(store.name(for: document))
-    }
+    @State private var isFontPickerPresented = false
+    @State private var customFont: Font?
 
     var body: some View {
         NavigationView {
@@ -23,19 +19,13 @@ struct EmojiArtDocumentChooser: View {
                 ForEach(store.documents) { document in
                     let emojiArtDocumentView = EmojiArtDocumentView(document: document)
                         .navigationTitle(store.name(for: document))
-                    NavigationLink(destination: emojiArtDocumentView) {
-                        EditableText(store.name(for: document), isEditing: editMode.isEditing, onChanged: { name in
-                            store.setName(name, for: document)
-                        })
-                    }
+                        .environment(\.font, customFont)
 
-                    // TODO: works for timer but breaks nav function
-//                    .simultaneousGesture(TapGesture().onEnded {
-//                        store.documents.forEach { doc in
-//                            doc.stopTimeTracker()
-//                        }
-//                        document.startTimeTracker()
-//                    })
+                    NavigationLink(destination: emojiArtDocumentView) {
+                        EditableText(
+                            store.name(for: document), isEditing: editMode.isEditing, onChanged: { name in store.setName(name, for: document) }
+                        ).environment(\.font, customFont)
+                    }
                 }
                 .onDelete { indexSet in
                     indexSet
@@ -43,7 +33,7 @@ struct EmojiArtDocumentChooser: View {
                         .forEach { store.removeDocument($0) }
                 }
             }
-            .navigationBarTitle(store.name)
+            .navigationBarTitle(store.name).environment(\.font, customFont)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
@@ -60,6 +50,23 @@ struct EmojiArtDocumentChooser: View {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     EditButton()
                 }
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    HStack {
+                        Button {
+                            isFontPickerPresented = true
+                        } label: {
+                            Image(systemName: "textformat").imageScale(.large)
+                        }
+                    }
+                    .sheet(isPresented: $isFontPickerPresented) {
+                        FontPicker { font in
+                            if let font = font {
+                                customFont = Font(uiFont: UIFont(descriptor: font.fontDescriptor, size: UIFont.systemFontSize))
+                            }
+                            isFontPickerPresented = false
+                        }
+                    }
+                }
             }
             .environment(\.editMode, $editMode)
 
@@ -71,10 +78,12 @@ struct EmojiArtDocumentChooser: View {
         let document = store.documents.first ?? store.addDocument()
         return EmojiArtDocumentView(document: document)
             .navigationTitle(store.name(for: document))
+            .environment(\.font, customFont)
     }
 
     private func createEmojiArtWallView() -> some View {
         return EmojiArtWallView(store: store)
             .navigationTitle("Emoji Art Wall")
+            .environment(\.font, customFont)
     }
 }
