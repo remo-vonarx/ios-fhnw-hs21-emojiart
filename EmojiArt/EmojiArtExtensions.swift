@@ -177,3 +177,12 @@ extension Font {
         self = Font(uiFont as CTFont)
     }
 }
+
+extension Formatter {
+    static let time: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.day, .hour, .minute, .second]
+        formatter.unitsStyle = .abbreviated
+        return formatter
+    }()
+}

@@ -100,7 +100,7 @@ struct EmojiArtDocumentView: View {
 
     private func createTimeTracker() -> some View {
         return HStack {
-            Label("\(document.getTime()) s", systemImage: "timer")
+            Label(document.timeSpentFormatted, systemImage: "timer")
         }.onAppear{
             document.startTimeTracker()
             print("\(document.id): I've appeared")

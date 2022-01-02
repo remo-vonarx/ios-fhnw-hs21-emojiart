@@ -21,8 +21,9 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
     var emojis: [EmojiArtModel.Emoji] { emojiArtModel.emojis }
 
     private var timer: Publishers.Autoconnect<Timer.TimerPublisher>?
-    private var subscription: AnyCancellable?
-    
+    private var timerSubscription: AnyCancellable?
+    @Published var timeSpentFormatted: String = "n.a"
+
     var backgroundColor: Color {
         get {
             return Color(UIColor(red: CGFloat(emojiArtModel.backgroundColor.red), green: CGFloat(emojiArtModel.backgroundColor.green), blue: CGFloat(emojiArtModel.backgroundColor.blue), alpha: CGFloat(emojiArtModel.backgroundColor.alpha)))
@@ -66,6 +67,7 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
         let emojiArtDocumentKey = "EmojiArtDocumentViewModel.Untitled\(id)"
         let emojiArtJson = UserDefaults.standard.data(forKey: emojiArtDocumentKey)
         emojiArtModel = EmojiArtModel(json: emojiArtJson) ?? EmojiArtModel()
+        timeSpentFormatted = Formatter.time.string(from: TimeInterval(emojiArtModel.timeSpent)) ?? "n.a"
         emojiartModelSink = $emojiArtModel.sink { emojiArtModel in
             // print("JSON: \(emojiArtModel.json?.utf8 ?? "nil")")
             UserDefaults.standard.set(emojiArtModel.json, forKey: emojiArtDocumentKey)
@@ -76,24 +78,21 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
     func startTimeTracker() {
         print("Starting/Resuming timer at \(emojiArtModel.timeSpent) s")
         timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
-        subscription = timer?.sink(receiveValue: { _ in
+        timerSubscription = timer?.sink(receiveValue: { _ in
             self.updateTimeSpent()
         })
     }
 
     func stopTimeTracker() {
         print("Stopping timer at \(emojiArtModel.timeSpent) s")
-        subscription?.cancel()
+        timerSubscription?.cancel()
         timer?.upstream.connect().cancel()
         UserDefaults.standard.set(emojiArtModel.timeSpent, forKey: "EmojiArtDocumentViewModel.\(id).timeSpent")
     }
 
-    func getTime() -> Int {
-        emojiArtModel.timeSpent
-    }
-
     func updateTimeSpent() {
         emojiArtModel.timeSpent += 1
+        timeSpentFormatted = Formatter.time.string(from: TimeInterval(emojiArtModel.timeSpent)) ?? "n.a"
     }
 
     // MARK: - Intents
