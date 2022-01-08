@@ -69,14 +69,12 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
         emojiArtModel = EmojiArtModel(json: emojiArtJson) ?? EmojiArtModel()
         timeSpentFormatted = Formatter.time.string(from: TimeInterval(emojiArtModel.timeSpent)) ?? "n.a"
         emojiartModelSink = $emojiArtModel.sink { emojiArtModel in
-            // print("JSON: \(emojiArtModel.json?.utf8 ?? "nil")")
             UserDefaults.standard.set(emojiArtModel.json, forKey: emojiArtDocumentKey)
         }
         fetchBackgroundImageData()
     }
 
     func startTimeTracker() {
-        print("Starting/Resuming timer at \(emojiArtModel.timeSpent) s")
         timer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
         timerSubscription = timer?.sink(receiveValue: { _ in
             self.updateTimeSpent()
@@ -84,7 +82,6 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
     }
 
     func stopTimeTracker() {
-        print("Stopping timer at \(emojiArtModel.timeSpent) s")
         timerSubscription?.cancel()
         timer?.upstream.connect().cancel()
         UserDefaults.standard.set(emojiArtModel.timeSpent, forKey: "EmojiArtDocumentViewModel.\(id).timeSpent")

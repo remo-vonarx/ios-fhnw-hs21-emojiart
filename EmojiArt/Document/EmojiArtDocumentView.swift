@@ -88,13 +88,8 @@ struct EmojiArtDocumentView: View {
             }
         }.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification), perform: { output in
             document.startTimeTracker()
-            print("\(document.id): I've got re-opened")
         }).onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification), perform: { output in
             document.stopTimeTracker()
-            print("\(document.id): I've entered background")
-        }).onReceive(NotificationCenter.default.publisher(for: UIApplication.willTerminateNotification), perform: { output in
-            document.stopTimeTracker()
-            print("\(document.id): I've got terminated")
         })
     }
 
