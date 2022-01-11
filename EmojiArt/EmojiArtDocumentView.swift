@@ -5,8 +5,6 @@ struct EmojiArtDocumentView: View {
     @State private var chosenPalette: String
     @State private var isColorPickerEditorPresented = false
     @State private var isPastingExplanationPresented = false
-    @State private var isImagePickerPresented = false
-    @State private var imagePickerSourceType: UIImagePickerController.SourceType = .photoLibrary
 
     init(document: EmojiArtDocumentViewModel) {
         self.document = document
@@ -26,6 +24,14 @@ struct EmojiArtDocumentView: View {
                     createEmojiLayer(geometry: geometry)
                 }
                 .gesture(doubleTapGesture(in: geometry))
+//                .onDisappear {
+//                    // TODO: not working properly not counting up after bg reactiviting app
+//                    // TODO: after ca 5 doc changes counting multiple timers up
+//                    document.stopTimeTracker()
+//                }
+//                .onAppear {
+//                    document.startTimeTracker()
+//                }
             }
             .gesture(panGesture())
             .gesture(zoomGesture())
@@ -58,51 +64,23 @@ struct EmojiArtDocumentView: View {
                     Alert(title: Text("Paste Background Image"), message: Text("Copy the URL of an image to set it as background image"))
                 }
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                HStack {
-                    Button {
-                        imagePickerSourceType = .photoLibrary
-                        isImagePickerPresented = true
-                    } label: {
-                        Image(systemName: "photo").imageScale(.large)
-                    }
-                    if UIImagePickerController.isSourceTypeAvailable(.camera) {
-                        Button {
-                            imagePickerSourceType = .camera
-                            isImagePickerPresented = true
-                        } label: {
-                            Image(systemName: "camera").imageScale(.large)
-                        }
-                    }
-                }
-                .sheet(isPresented: $isImagePickerPresented) {
-                    ImagePicker(sourceType: imagePickerSourceType) { image in
-                        if let image = image {
-                            DispatchQueue.main.async { // Update view instantly, store file async
-                                document.backgroundURL = image.storeInFilesystem()
-                            }
-                        }
-                        isImagePickerPresented = false
-                    }
-                }
+        }
+        // handle app states to stop and start timer
+        .onChange(of: UIApplication.shared.applicationState) { phase in
+            switch phase {
+            case .active:
+                document.startTimeTracker()
+            case .inactive, .background:
+                document.stopTimeTracker()
+            @unknown default:
+                print("default")
             }
-        }.onReceive(NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification), perform: { output in
-            document.startTimeTracker()
-        }).onReceive(NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification), perform: { output in
-            document.stopTimeTracker()
-        })
+        }
     }
 
     private func createTimeTracker() -> some View {
         return HStack {
-            Label(document.timeSpentFormatted, systemImage: "timer")
-        }.onAppear{
-            document.startTimeTracker()
-            print("\(document.id): I've appeared")
-        }
-        .onDisappear{
-            document.stopTimeTracker()
-            print("\(document.id): I've disappeared")
+            Label("\(document.getTime()) s", systemImage: "timer")
         }
     }
 
