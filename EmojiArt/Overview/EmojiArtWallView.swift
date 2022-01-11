@@ -16,11 +16,9 @@ struct EmojiArtWallView: View {
     }
     
     let columns = [
-        GridItem(.flexible(minimum: 50)),
-        GridItem(.flexible(minimum: 50)),
+        GridItem(.flexible(minimum: columnSize)),
+        GridItem(.flexible(minimum: columnSize)),
     ]
-    
-
     
     var body: some View {
         ScrollView(.vertical) {
@@ -43,13 +41,23 @@ struct EmojiArtWallView: View {
             if let image = document.backgroundImage {
                 Image(uiImage: image)
                     .resizable()
-                    .aspectRatio(1, contentMode: .fit)
+                    .aspectRatio(ratio, contentMode: .fit)
+                    .overlay(RoundedRectangle(cornerRadius: corner).stroke(.black, lineWidth: lineWidth))
             } else {
-                Rectangle()
-                    .foregroundColor(.gray)
-                    .aspectRatio(1, contentMode: .fit)
+                Image("Placeholder_ArtWall")
+                    .resizable()
+                    .aspectRatio(ratio, contentMode: .fit)
+                    .overlay(RoundedRectangle(cornerRadius: corner).stroke(.black, lineWidth: lineWidth))
             }
             Text(documentName).font(customFont)
         }
     }
 }
+
+
+// MARK: - Drawing constants
+
+private let columnSize: CGFloat = 50
+private let ratio: CGFloat = 1
+private let corner: CGFloat = 4
+private let lineWidth: CGFloat = 2
