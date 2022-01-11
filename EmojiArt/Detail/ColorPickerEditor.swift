@@ -10,7 +10,8 @@ import SwiftUI
 struct ColorPickerEditor: View {
     @ObservedObject var document: EmojiArtDocumentViewModel
     @State var backgroundColor: Color
-    @State var opacity: Double
+    @State var opacityColor: Double
+    @State var opacityImage: Double
 
     @Environment(\.presentationMode) var presentation
 
@@ -34,11 +35,19 @@ struct ColorPickerEditor: View {
                         document.backgroundColor = newValue
                     }
                 HStack {
-                    Text("Opacity of background")
+                    Text("Opacity of background color")
                     Spacer()
-                    Slider(value: $opacity)
-                        .onChange(of: opacity) { newValue in
-                            document.opacity = newValue
+                    Slider(value: $opacityColor)
+                        .onChange(of: opacityColor) { newValue in
+                            document.opacityColor = newValue
+                        }
+                }
+                HStack {
+                    Text("Opacity of background image")
+                    Spacer()
+                    Slider(value: $opacityImage)
+                        .onChange(of: opacityImage) { newValue in
+                            document.opacityImage = newValue
                         }
                 }
             }

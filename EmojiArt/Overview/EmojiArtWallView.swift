@@ -43,6 +43,7 @@ struct EmojiArtWallView: View {
                     .resizable()
                     .aspectRatio(ratio, contentMode: .fit)
                     .overlay(RoundedRectangle(cornerRadius: corner).stroke(.black, lineWidth: lineWidth))
+                    .opacity(document.opacityImage)
             } else {
                 Image("Placeholder_ArtWall")
                     .resizable()
