@@ -41,7 +41,7 @@ struct EmojiArtDocumentView: View {
                     Image(systemName: "eyedropper").imageScale(.large)
                 }
                 .sheet(isPresented: $isColorPickerEditorPresented) {
-                    ColorPickerEditor(document: document, backgroundColor: document.backgroundColor, opacity: document.opacity)
+                    ColorPickerEditor(document: document, backgroundColor: document.backgroundColor, opacityColor: document.opacityColor, opacityImage: document.opacityImage)
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -128,10 +128,10 @@ struct EmojiArtDocumentView: View {
                     Image(uiImage: image)
                         .scaleEffect(zoomScale)
                         .position(toCanvasCoordinate(from: CGPoint(x: 0, y: 0), in: geometry))
+                        .opacity(document.opacityImage)
                 }
             }
         )
-        .opacity(document.opacity)
         .edgesIgnoringSafeArea([.horizontal, .bottom])
         .onDrop(of: [.url, .plainText, .image], isTargeted: nil) { providers, location in
             drop(providers: providers, location: location, geometry: geometry)

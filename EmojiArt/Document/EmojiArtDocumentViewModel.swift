@@ -38,19 +38,27 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
             emojiArtModel.backgroundColor.red = Float(red)
             emojiArtModel.backgroundColor.green = Float(green)
             emojiArtModel.backgroundColor.blue = Float(blue)
-            emojiArtModel.backgroundColor.alpha = Float(alpha)
         }
     }
 
-    var opacity: Double {
+    var opacityColor: Double {
         get {
-            emojiArtModel.opacity
+            emojiArtModel.backgroundColor.alpha
         }
         set {
-            emojiArtModel.opacity = newValue
+            emojiArtModel.backgroundColor.alpha = newValue
         }
     }
 
+    var opacityImage: Double {
+        get {
+            emojiArtModel.opacityImage
+        }
+        set {
+            emojiArtModel.opacityImage = newValue
+        }
+    }
+    
     var backgroundURL: URL? {
         get {
             emojiArtModel.backgroundURL

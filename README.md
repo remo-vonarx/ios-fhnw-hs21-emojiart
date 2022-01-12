@@ -16,7 +16,8 @@
 - 2
 - 3
     * Custom-Background Image wenn kein Background-Image hinterlegt ist
+    * 2 Opacities für Hintergrundfarbe und -bild seperat einstellbar
+    * Image opacity in Art Wall Übersicht angewendet 
 - 4
-
 
 (Eingerückte Punkte wurden zusätzlich implementiert.)
