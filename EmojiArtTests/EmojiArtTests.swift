@@ -46,6 +46,10 @@ class EmojiArtTests: XCTestCase {
         XCTAssertEqual(paletteCount, document.paletteNames.count)
         XCTAssertTrue(document.defaultPalette.contains(palette))
         XCTAssertTrue(document.defaultPalette.contains(emoji))
+        
+        // reset palette
+        document.removeEmojis(emoji, fromPalette: document.defaultPalette)
+        XCTAssertEqual(palette, document.defaultPalette)
     }
     
     func testRemoveEmoji_whenTextIsEmoji() throws {
@@ -56,8 +60,12 @@ class EmojiArtTests: XCTestCase {
         document.removeEmojis(emoji, fromPalette: palette)
         
         XCTAssertEqual(paletteCount, document.paletteNames.count)
-        XCTAssertEqual(palette,emoji + document.defaultPalette)
         XCTAssertFalse(document.defaultPalette.contains(emoji))
+        XCTAssertEqual(palette, emoji + document.defaultPalette)
+        
+        // reset palette
+        document.addEmoji(emoji, toPalette: document.defaultPalette)
+        XCTAssertEqual(palette, document.defaultPalette)
     }
     
     func testRemoveEmoji_whenTextNotExisting_doesNothing() throws {
@@ -88,11 +96,12 @@ class EmojiArtTests: XCTestCase {
         XCTAssertEqual(palette, document.defaultPalette)
     }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
+    func testPerformanceAddAndRemoveEmoji() throws {
         self.measure {
-            // Put the code you want to measure the time of here.
+            let emoji = "🙃"
+            
+            document.addEmoji(emoji, toPalette: document.defaultPalette)
+            document.removeEmojis(emoji, fromPalette: document.defaultPalette)
         }
     }
-
 }
