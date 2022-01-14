@@ -56,7 +56,10 @@ class EmojiArtUITests: XCTestCase {
         let wKey = app/*@START_MENU_TOKEN@*/.keys["w"]/*[[".keyboards.keys[\"w\"]",".keys[\"w\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
         wKey.tap()
         
-        let leerzeichenKey = app/*@START_MENU_TOKEN@*/.keys["Leerzeichen"]/*[[".keyboards.keys[\"Leerzeichen\"]",".keys[\"Leerzeichen\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        var leerzeichenKey = app/*@START_MENU_TOKEN@*/.keys["Leerzeichen"]/*[[".keyboards.keys[\"Leerzeichen\"]",".keys[\"Leerzeichen\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        if !leerzeichenKey.exists {
+            leerzeichenKey = app/*@START_MENU_TOKEN@*/.keys["space"]/*[[".keyboards.keys[\"space\"]",".keys[\"space\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        }
         leerzeichenKey.tap()
         
         app/*@START_MENU_TOKEN@*/.buttons["shift"]/*[[".keyboards",".buttons[\"Umschalt\"]",".buttons[\"shift\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
@@ -81,7 +84,7 @@ class EmojiArtUITests: XCTestCase {
         XCTAssertTrue(app.tables.buttons["New Title"].firstMatch.exists)
     }
 
-    func estLaunchPerformance() throws {
+    func testLaunchPerformance() throws {
         if #available(iOS 13.0, *) {
             measure(metrics: [XCTApplicationLaunchMetric()]) {
                 XCUIApplication().launch()
