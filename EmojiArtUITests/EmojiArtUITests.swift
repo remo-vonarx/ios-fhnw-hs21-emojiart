@@ -22,25 +22,63 @@ class EmojiArtUITests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         
-        if app.navigationBars["Untitled"].exists {
+        if app.navigationBars["Untitled"]/*@START_MENU_TOKEN@*/.buttons["BackButton"]/*[[".buttons[\"Emoji Art\"]",".buttons[\"BackButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.exists {
             app.navigationBars["Untitled"]/*@START_MENU_TOKEN@*/.buttons["BackButton"]/*[[".buttons[\"Emoji Art\"]",".buttons[\"BackButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         }
-        let emojiArtNavigationBar = app.navigationBars["Emoji Art"]
-        emojiArtNavigationBar.buttons["Edit"].tap()
-        app.tables.textFields["Untitled"].tap()
-        app.tables.textFields["Untitled"].doubleTap()
-//        app.keys["N"].tab()
-//        app.keys["e"].tab()
-//        app.keys["w"].tab()
-//        app.keys[" "].tab()
-//        app.keys["T"].tab()
-//        app.keys["i"].tab()
-//        app.keys["t"].tab()
-//        app.keys["l"].tab()
-//        app.keys["e"].tab()
-        emojiArtNavigationBar.buttons["Done"].tap()
-        app.tables.buttons["New Title"].tap()
 
+        let emojiArtNavigationBar = app.navigationBars["Emoji Art"]
+        
+        if !app.tables.buttons["Untitled"].exists {
+            emojiArtNavigationBar.buttons["Add"].tap()
+        }
+        
+        emojiArtNavigationBar.buttons["Edit"].tap()
+        
+        while app.tables.textFields["New Title"].firstMatch.exists {
+            let tablesQuery = app.tables
+            tablesQuery/*@START_MENU_TOKEN@*/.buttons["Delete "]/*[[".cells.buttons[\"Delete \"]",".buttons[\"Delete \"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
+            tablesQuery/*@START_MENU_TOKEN@*/.buttons["Delete"]/*[[".cells.buttons[\"Delete\"]",".buttons[\"Delete\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
+        }
+        XCTAssertFalse(app.tables.textFields["New Title"].exists)
+
+        app.tables.textFields["Untitled"].firstMatch.tap()
+        
+        let untitledTextField = app.tables/*@START_MENU_TOKEN@*/.textFields["Untitled"]/*[[".cells",".buttons.textFields[\"Untitled\"]",".textFields[\"Untitled\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.firstMatch
+        untitledTextField.tap()
+        untitledTextField.doubleTap()
+
+        let nKey = app/*@START_MENU_TOKEN@*/.keys["N"]/*[[".keyboards.keys[\"N\"]",".keys[\"N\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        nKey.tap()
+        
+        let eKey = app/*@START_MENU_TOKEN@*/.keys["e"]/*[[".keyboards.keys[\"e\"]",".keys[\"e\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        eKey.tap()
+        
+        let wKey = app/*@START_MENU_TOKEN@*/.keys["w"]/*[[".keyboards.keys[\"w\"]",".keys[\"w\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        wKey.tap()
+        
+        let leerzeichenKey = app/*@START_MENU_TOKEN@*/.keys["Leerzeichen"]/*[[".keyboards.keys[\"Leerzeichen\"]",".keys[\"Leerzeichen\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        leerzeichenKey.tap()
+        
+        app/*@START_MENU_TOKEN@*/.buttons["shift"]/*[[".keyboards",".buttons[\"Umschalt\"]",".buttons[\"shift\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+        let tKey = app/*@START_MENU_TOKEN@*/.keys["T"]/*[[".keyboards.keys[\"T\"]",".keys[\"T\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        tKey.tap()
+        
+        let iKey = app/*@START_MENU_TOKEN@*/.keys["i"]/*[[".keyboards.keys[\"i\"]",".keys[\"i\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        iKey.tap()
+        
+        let tKey2 = app/*@START_MENU_TOKEN@*/.keys["t"]/*[[".keyboards.keys[\"t\"]",".keys[\"t\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        tKey2.tap()
+        
+        let lKey = app/*@START_MENU_TOKEN@*/.keys["l"]/*[[".keyboards.keys[\"l\"]",".keys[\"l\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        lKey.tap()
+        
+        eKey.tap()
+        
+        app/*@START_MENU_TOKEN@*/.buttons["Return"]/*[[".keyboards.buttons[\"Return\"]",".buttons[\"Return\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        
+        emojiArtNavigationBar.buttons["Done"].tap()
+
+        XCTAssertTrue(app.tables.buttons["New Title"].firstMatch.exists)
     }
 
     func estLaunchPerformance() throws {
