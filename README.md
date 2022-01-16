@@ -29,3 +29,5 @@
 
 Wenn die UI Tests nicht durchlaufen, liegt es daran, dass die Pop-Up Tastatur des Simulatorgerätes nicht auftaucht. Um dieses Problem zu beheben muss der verwendete Simulator (wahrscheinlich iPhone 8) gestartet werden und die Einstellung angepasst werden. Einstellungen wie folgt: Entferne den Check neben 'Connect Hardware Keyboard'
 ![img.png](settingsKeyboard.png)
+\
+Sollte der Test immer noch fehlschlagen, liegt es daran, dass der doubleTab auf das Textfield nicht ausgeführt wurde. Es kann helfen den Test nochmals auszuführen.
