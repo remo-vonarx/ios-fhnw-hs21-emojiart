@@ -22,31 +22,47 @@ class EmojiArtUITests: XCTestCase {
         let app = XCUIApplication()
         app.launch()
         
-        if app.navigationBars["Untitled"]/*@START_MENU_TOKEN@*/.buttons["BackButton"]/*[[".buttons[\"Emoji Art\"]",".buttons[\"BackButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.exists {
-            app.navigationBars["Untitled"]/*@START_MENU_TOKEN@*/.buttons["BackButton"]/*[[".buttons[\"Emoji Art\"]",".buttons[\"BackButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        // go to overview if in detail view
+        if app.navigationBars.firstMatch/*@START_MENU_TOKEN@*/.buttons["BackButton"]/*[[".buttons[\"Emoji Art\"]",".buttons[\"BackButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.exists {
+            app.navigationBars.firstMatch/*@START_MENU_TOKEN@*/.buttons["BackButton"]/*[[".buttons[\"Emoji Art\"]",".buttons[\"BackButton\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         }
 
+        // delete all files until no new name file is left
         let emojiArtNavigationBar = app.navigationBars["Emoji Art"]
+        if app.tables.buttons["New Title"].firstMatch.exists {
+            emojiArtNavigationBar.buttons["Edit"].tap()
+            
+            while app.tables.textFields["New Title"].firstMatch.exists {
+                let tablesQuery = app.tables
+                tablesQuery/*@START_MENU_TOKEN@*/.buttons["Delete "]/*[[".cells.buttons[\"Delete \"]",".buttons[\"Delete \"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
+                tablesQuery/*@START_MENU_TOKEN@*/.buttons["Delete"]/*[[".cells.buttons[\"Delete\"]",".buttons[\"Delete\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
+            }
+            emojiArtNavigationBar.buttons["Done"].tap()
+        }
         
+        XCTAssertFalse(app.tables.buttons["New Title"].exists)
+
+        // add untitled if not existing
         if !app.tables.buttons["Untitled"].exists {
             emojiArtNavigationBar.buttons["Add"].tap()
         }
-        
-        emojiArtNavigationBar.buttons["Edit"].tap()
-        
-        while app.tables.textFields["New Title"].firstMatch.exists {
-            let tablesQuery = app.tables
-            tablesQuery/*@START_MENU_TOKEN@*/.buttons["Delete "]/*[[".cells.buttons[\"Delete \"]",".buttons[\"Delete \"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
-            tablesQuery/*@START_MENU_TOKEN@*/.buttons["Delete"]/*[[".cells.buttons[\"Delete\"]",".buttons[\"Delete\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.firstMatch.tap()
-        }
-        XCTAssertFalse(app.tables.textFields["New Title"].exists)
 
-        app.tables.textFields["Untitled"].firstMatch.tap()
-        
+        // enter untitiled edit mode
+        emojiArtNavigationBar.buttons["Edit"].tap()
         let untitledTextField = app.tables/*@START_MENU_TOKEN@*/.textFields["Untitled"]/*[[".cells",".buttons.textFields[\"Untitled\"]",".textFields[\"Untitled\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.firstMatch
         untitledTextField.tap()
         untitledTextField.doubleTap()
 
+        // add new text
+        writeNewTitle(app: app)
+                
+        emojiArtNavigationBar.buttons["Done"].tap()
+
+        // test changes existing
+        XCTAssertTrue(app.tables.buttons["New Title"].firstMatch.exists)
+    }
+    
+    func writeNewTitle(app: XCUIApplication) {
         let nKey = app/*@START_MENU_TOKEN@*/.keys["N"]/*[[".keyboards.keys[\"N\"]",".keys[\"N\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
         nKey.tap()
         
@@ -76,12 +92,6 @@ class EmojiArtUITests: XCTestCase {
         lKey.tap()
         
         eKey.tap()
-        
-        app/*@START_MENU_TOKEN@*/.buttons["Return"]/*[[".keyboards.buttons[\"Return\"]",".buttons[\"Return\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
-        
-        emojiArtNavigationBar.buttons["Done"].tap()
-
-        XCTAssertTrue(app.tables.buttons["New Title"].firstMatch.exists)
     }
 
     func testLaunchPerformance() throws {

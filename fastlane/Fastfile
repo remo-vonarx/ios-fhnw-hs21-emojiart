@@ -20,7 +20,7 @@ platform :ios do
   lane :tests do
     # add actions here: https://docs.fastlane.tools/actions
     puts "============ Tests started ==========="
-    run_tests
+    scan(devices: ["iPhone 12 mini", "iPad (9th generation)"])
     puts "============ Tests finished ==========="
   end
 end
