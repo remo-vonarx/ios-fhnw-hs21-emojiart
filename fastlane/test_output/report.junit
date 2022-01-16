@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<testsuites name='EmojiArtUITests.xctest' tests='12' failures='0'>
+  <testsuite name='EmojiArtTests.EmojiArtTests' tests='6' failures='0'>
+    <testcase classname='EmojiArtTests.EmojiArtTests' name='testAddEmoji_whenTextIsEmoji' time='0.010'/>
+    <testcase classname='EmojiArtTests.EmojiArtTests' name='testAddEmoji_whenTextIsEmpty_doesNothing' time='0.003'/>
+    <testcase classname='EmojiArtTests.EmojiArtTests' name='testPerformanceAddAndRemoveEmoji' time='0.440'/>
+    <testcase classname='EmojiArtTests.EmojiArtTests' name='testRemoveEmoji_whenTextIsEmoji' time='0.006'/>
+    <testcase classname='EmojiArtTests.EmojiArtTests' name='testRemoveEmoji_whenTextIsEmpty_doesNothing' time='0.006'/>
+    <testcase classname='EmojiArtTests.EmojiArtTests' name='testRemoveEmoji_whenTextNotExisting_doesNothing' time='0.004'/>
+  </testsuite>
+  <testsuite name='EmojiArtUITests.EmojiArtUITests' tests='2' failures='0'>
+    <testcase classname='EmojiArtUITests.EmojiArtUITests' name='testEditDocumentTitle' time='13.562'/>
+    <testcase classname='EmojiArtUITests.EmojiArtUITests' name='testLaunchPerformance' time='93.317'/>
+  </testsuite>
+  <testsuite name='EmojiArtUITests.EmojiArtUITestsLaunchTests' tests='4' failures='0'>
+    <testcase classname='EmojiArtUITests.EmojiArtUITestsLaunchTests' name='testLaunch' time='7.823'/>
+    <testcase classname='EmojiArtUITests.EmojiArtUITestsLaunchTests' name='testLaunch' time='7.708'/>
+    <testcase classname='EmojiArtUITests.EmojiArtUITestsLaunchTests' name='testLaunch' time='6.184'/>
+    <testcase classname='EmojiArtUITests.EmojiArtUITestsLaunchTests' name='testLaunch' time='7.942'/>
+  </testsuite>
+</testsuites>
