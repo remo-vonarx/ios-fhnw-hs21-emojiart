@@ -1,3 +1,6 @@
 .DS_STORE
 .xcuserstate
 xcdebugger/
+
+fastlane/test_output/
+fastlane/report.xml
