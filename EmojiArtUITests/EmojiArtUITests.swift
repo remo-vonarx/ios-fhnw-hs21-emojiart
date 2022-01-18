@@ -15,6 +15,7 @@ class EmojiArtUITests: XCTestCase {
         continueAfterFailure = false
         
         app.launch()
+        
         prepareAppForTest()
     }
 
@@ -95,14 +96,6 @@ class EmojiArtUITests: XCTestCase {
         // add untitled if not existing
         if !app.tables.buttons["Untitled"].exists {
             emojiArtNavigationBar.buttons["Add"].tap()
-        }
-    }
-
-    func testLaunchPerformance() throws {
-        if #available(iOS 13.0, *) {
-            measure(metrics: [XCTApplicationLaunchMetric()]) {
-                XCUIApplication().launch()
-            }
         }
     }
 }

@@ -22,6 +22,7 @@
 - 5
     * 2 weitere Tests für add Emoji und 2 Tests für remove Emoji 
 - 6
+    * Tests für iPhone 12 mini und iPad 9th gen. nach einanader ausführen
 
 (Eingerückte Punkte wurden zusätzlich implementiert.)
 

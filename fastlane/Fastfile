@@ -19,9 +19,9 @@ platform :ios do
   desc "Run all tests of Emoji Art"
   lane :tests do
     # add actions here: https://docs.fastlane.tools/actions
-    puts "============ Tests started ==========="
+    puts "============ Tests started (iPad 9th Gen.) ==========="
     scan(devices: ["iPad (9th generation)"], clean: true)
-    puts "============ Tests switch ==========="
+    puts "============ Tests switch (iPhone 12 mini) ==========="
     scan(devices: ["iPhone 12 mini"], clean: true)
     puts "============ Tests finished ==========="
   end
