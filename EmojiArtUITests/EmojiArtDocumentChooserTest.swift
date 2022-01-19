@@ -87,7 +87,7 @@ class EmojiArtUITests: XCTestCase {
         let updatedDocumentName = firstDocument.label
         
         XCTAssertTrue(app.tables.buttons[title].firstMatch.exists)
-        XCTAssertEquals(updatedDocumentName.count, title.count)
-        XCTAssertEquals(updatedDocumentName, title)
+        XCTAssertEqual(updatedDocumentName.count, title.count)
+        XCTAssertEqual(updatedDocumentName, title)
     }
 }
