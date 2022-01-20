@@ -41,8 +41,12 @@ extension EmojiArtDocumentViewModel {
 
     @discardableResult
     func addEmoji(_ emoji: String, toPalette palette: String) -> String {
-        let newPalette = (emoji + palette).uniqued()
-        return changePalette(palette, to: newPalette)
+        if emoji.trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) != "" {
+            let newPalette = (emoji + palette).uniqued()
+            return changePalette(palette, to: newPalette)
+        } else {
+            return palette
+        }
     }
 
     @discardableResult

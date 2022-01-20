@@ -9,25 +9,99 @@ import XCTest
 @testable import EmojiArt
 
 class EmojiArtTests: XCTestCase {
+    var document: EmojiArtDocumentViewModel!
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        super.setUp()
+        document = EmojiArtDocumentViewModel()
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        document = nil
+        super.tearDown()
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+    func testAddEmoji_whenTextIsEmpty_doesNothing() throws {
+        let paletteCount = document.paletteNames.count
+        let palette = document.defaultPalette
+        
+        document.addEmoji("", toPalette: palette)
+        
+        XCTAssertEqual(paletteCount, document.paletteNames.count)
+        XCTAssertEqual(palette, document.defaultPalette)
+
+        document.addEmoji(" ", toPalette: palette)
+        
+        XCTAssertEqual(paletteCount, document.paletteNames.count)
+        XCTAssertEqual(palette, document.defaultPalette)
+    }
+    
+    func testAddEmoji_whenTextIsEmoji() throws {
+        let paletteCount = document.paletteNames.count
+        let palette = document.defaultPalette
+        let emoji = "🙃"
+        
+        document.addEmoji(emoji, toPalette: palette)
+        
+        XCTAssertEqual(paletteCount, document.paletteNames.count)
+        XCTAssertTrue(document.defaultPalette.contains(palette))
+        XCTAssertTrue(document.defaultPalette.contains(emoji))
+        
+        // reset palette
+        document.removeEmojis(emoji, fromPalette: document.defaultPalette)
+        XCTAssertEqual(palette, document.defaultPalette)
+    }
+    
+    func testRemoveEmoji_whenTextIsEmoji() throws {
+        let paletteCount = document.paletteNames.count
+        let palette = document.defaultPalette
+        let emoji = document.defaultPalette.first!.description
+        
+        document.removeEmojis(emoji, fromPalette: palette)
+        
+        XCTAssertEqual(paletteCount, document.paletteNames.count)
+        XCTAssertFalse(document.defaultPalette.contains(emoji))
+        XCTAssertEqual(palette, emoji + document.defaultPalette)
+        
+        // reset palette
+        document.addEmoji(emoji, toPalette: document.defaultPalette)
+        XCTAssertEqual(palette, document.defaultPalette)
+    }
+    
+    func testRemoveEmoji_whenTextNotExisting_doesNothing() throws {
+        let paletteCount = document.paletteNames.count
+        let palette = document.defaultPalette
+        let emoji = "A"
+
+        XCTAssertFalse(document.defaultPalette.contains(emoji))
+
+        document.removeEmojis(emoji, fromPalette: palette)
+        
+        XCTAssertEqual(paletteCount, document.paletteNames.count)
+        XCTAssertEqual(palette, document.defaultPalette)
+    }
+    
+    func testRemoveEmoji_whenTextIsEmpty_doesNothing() throws {
+        let paletteCount = document.paletteNames.count
+        let palette = document.defaultPalette
+        
+        document.removeEmojis("", fromPalette: palette)
+        
+        XCTAssertEqual(paletteCount, document.paletteNames.count)
+        XCTAssertEqual(palette, document.defaultPalette)
+
+        document.removeEmojis(" ", fromPalette: palette)
+        
+        XCTAssertEqual(paletteCount, document.paletteNames.count)
+        XCTAssertEqual(palette, document.defaultPalette)
     }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
+    func testPerformanceAddAndRemoveEmoji() throws {
         self.measure {
-            // Put the code you want to measure the time of here.
+            let emoji = "🙃"
+            
+            document.addEmoji(emoji, toPalette: document.defaultPalette)
+            document.removeEmojis(emoji, fromPalette: document.defaultPalette)
         }
     }
-
 }

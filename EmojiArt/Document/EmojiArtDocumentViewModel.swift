@@ -59,6 +59,12 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
         }
     }
     
+    var created: TimeInterval {
+        get {
+            emojiArtModel.created
+        }
+    }
+    
     var backgroundURL: URL? {
         get {
             emojiArtModel.backgroundURL

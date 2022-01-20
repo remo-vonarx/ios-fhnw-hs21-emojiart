@@ -6,6 +6,7 @@ struct EmojiArtModel: Codable {
     var opacityImage: Double = 1
     var timeSpent: Int = 0
     var emojis = [Emoji]()
+    var created = Date().timeIntervalSince1970
 
     init() {}
 
