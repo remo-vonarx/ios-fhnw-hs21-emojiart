@@ -43,9 +43,14 @@ class EmojiArtUITests: XCTestCase {
     func testEditDocumentTitles() throws{
         let titles:[String] = ["EmojiArt", "My first EmojiArt", "🙃", "", " "]
         setUpAppForDevice()
+        app.navigationBars["Emoji Art"].buttons["Add"].tap()
         for title in titles {
             try editDocumentTitle(title: title)
         }
+        
+        let tablesQuery = app.tables
+        tablesQuery.cells.element(boundBy: 0).swipeLeft()
+        tablesQuery/*@START_MENU_TOKEN@*/.buttons["Delete"]/*[[".cells.buttons[\"Delete\"]",".buttons[\"Delete\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
     }
 
     func editDocumentTitle(title: String) throws {
@@ -86,8 +91,8 @@ class EmojiArtUITests: XCTestCase {
         
         let updatedDocumentName = firstDocument.label
         
-        XCTAssertTrue(app.tables.buttons[title].firstMatch.exists)
         XCTAssertEqual(updatedDocumentName.count, title.count)
         XCTAssertEqual(updatedDocumentName, title)
+        XCTAssertNotEqual(updatedDocumentName, "Untitled")
     }
 }
