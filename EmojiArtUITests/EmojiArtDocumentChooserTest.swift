@@ -19,11 +19,20 @@ class EmojiArtUITests: XCTestCase {
         continueAfterFailure = false
         app.launch()
         
+        // prepare same basic (view and add test element)
+        setUpAppForDevice()
+        app.navigationBars["Emoji Art"].buttons["Add"].tap()
+        
         //This is called before all the test methods are being called
     }
     
     override func tearDownWithError() throws {
         super.tearDown()
+        
+        // clean up created test element
+        let tablesQuery = app.tables
+        tablesQuery.cells.element(boundBy: 0).swipeLeft()
+        tablesQuery/*@START_MENU_TOKEN@*/.buttons["Delete"]/*[[".cells.buttons[\"Delete\"]",".buttons[\"Delete\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
         
         //This is called after all the test methods got called
     }
@@ -42,15 +51,10 @@ class EmojiArtUITests: XCTestCase {
     
     func testEditDocumentTitles() throws{
         let titles:[String] = ["EmojiArt", "My first EmojiArt", "🙃", "", " "]
-        setUpAppForDevice()
-        app.navigationBars["Emoji Art"].buttons["Add"].tap()
+        
         for title in titles {
             try editDocumentTitle(title: title)
         }
-        
-        let tablesQuery = app.tables
-        tablesQuery.cells.element(boundBy: 0).swipeLeft()
-        tablesQuery/*@START_MENU_TOKEN@*/.buttons["Delete"]/*[[".cells.buttons[\"Delete\"]",".buttons[\"Delete\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
     }
 
     func editDocumentTitle(title: String) throws {
