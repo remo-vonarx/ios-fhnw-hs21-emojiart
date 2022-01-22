@@ -50,7 +50,7 @@ class EmojiArtUITests: XCTestCase {
     }
     
     func testEditDocumentTitles() throws {
-        let titles: [String] = ["EmojiArt", "My first EmojiArt", "🙃", "", " "]
+        let titles: [String] = ["EmojiArt", "My first EmojiArt", "🙃", "∞Æ—÷ˆ…∆ª", " "]
         
         for title in titles {
             try editDocumentTitle(title: title)
