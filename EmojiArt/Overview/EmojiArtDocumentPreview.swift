@@ -27,7 +27,6 @@ struct EmojiArtDocumentPreview: View {
                     .overlay(RoundedRectangle(cornerRadius: corner).stroke(.black, lineWidth: lineWidth))
             }
             Text(documentName).font(customFont)
-            
             Text("Time spent: \(document.timeSpentFormatted)").font(customFont).foregroundColor(.black)
         }
     }

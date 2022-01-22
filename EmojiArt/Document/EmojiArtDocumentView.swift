@@ -98,11 +98,9 @@ struct EmojiArtDocumentView: View {
             Label(document.timeSpentFormatted, systemImage: "timer")
         }.onAppear{
             document.startTimeTracker()
-            print("\(document.id): I've appeared")
         }
         .onDisappear{
             document.stopTimeTracker()
-            print("\(document.id): I've disappeared")
         }
     }
 
