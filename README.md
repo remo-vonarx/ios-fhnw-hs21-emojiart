@@ -12,18 +12,24 @@
 * 23.01.2022 23:59
 
 ### Aufgaben-Checkliste
-- 1
+- 1 
+    * Dauer wird zusammen mit dem Dokument gespeichert
+    * Dauer wird nach Tagen, Stunden, Minuten, Sekunden formattiert
+    * Beim Wechseln des Dokuments wird der Timer gestoppt
+    * Wenn die App in den Hintergrund gesetzt wird, wird der Timer des aktuellen Dokuments gestoppt
 - 2
+    * Anzeige von Name und Created
+    * Platzhalter-Bild wird angezeigt, wenn kein Hintergrund-Bild existiert
+    * Hintergrund-Bild Opacity aus Aufgabe 3 wird angezeigt wenn ein Hintergrund-Bild existiert
 - 3
-    * Custom-Background Image wenn kein Background-Image hinterlegt ist
-    * 2 Opacities für Hintergrundfarbe und -bild seperat einstellbar
-    * Image opacity in Art Wall Übersicht angewendet 
+    * Zusätzliche Opacity für Hintergrund-Bild einstellbar
 - 4
+    * Die Font wird mit Environment auf die ganze App angewendet
 - 5
-    * EmojiArtDocument hat nun ein created-Attribut und die Sortierung im EmojiArtDocumentStore wurde entsprechend angepasst, sodass dass das neueste Dokument zuoberst in der Liste ist.
-    * In der setUp-Funktion wird ein Test-Dokument angelegt und dann in der tearDown-Funktion wieder gelöscht.
-    * Es werden verschiedene Strings nacheinander getestet.
+    * EmojiArtDocument hat nun ein created-Attribut 
+    * Die Sortierung im EmojiArtDocumentStore wurde entsprechend angepasst, sodass dass das neueste Dokument zuoberst in der Liste ist
+    * In der setUp-Funktion wird ein Test-Dokument angelegt und dann in der tearDown-Funktion wieder gelöscht
+    * Es werden verschiedene Strings nacheinander getestet
 - 6
-    * Tests für iPhone 12 mini und iPad 9th gen. nach einanader ausführen
 
 (Eingerückte Punkte wurden zusätzlich implementiert.)
