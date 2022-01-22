@@ -9,7 +9,7 @@ class EmojiArtDocumentStore: ObservableObject {
 
     func name(for document: EmojiArtDocumentViewModel) -> String {
         if documentNames[document] == nil {
-            documentNames[document] = "Untitled"
+            documentNames[document] = defaultDocumentName
         }
         return documentNames[document]!
     }
@@ -22,7 +22,7 @@ class EmojiArtDocumentStore: ObservableObject {
         documentNames.keys.sorted { $0.created > $1.created }
     }
 
-    @discardableResult func addDocument(named name: String = "Untitled") -> EmojiArtDocumentViewModel {
+    @discardableResult func addDocument(named name: String = defaultDocumentName) -> EmojiArtDocumentViewModel {
         let document = EmojiArtDocumentViewModel()
         documentNames[document] = name
         return document
@@ -44,6 +44,10 @@ class EmojiArtDocumentStore: ObservableObject {
         }
     }
 }
+
+// MARK: - String constants
+
+private let defaultDocumentName: String = "Untitled"
 
 extension Dictionary where Key == EmojiArtDocumentViewModel, Value == String {
     /// Expects a property list with [EmojiArtDocumentViewModel.id: Name] as content

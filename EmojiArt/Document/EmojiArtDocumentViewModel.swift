@@ -22,7 +22,7 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
 
     private var timer: Publishers.Autoconnect<Timer.TimerPublisher>?
     private var timerSubscription: AnyCancellable?
-    @Published var timeSpentFormatted: String = "n.a"
+    @Published var timeSpentFormatted: String = timeNotAvailable
 
     var backgroundColor: Color {
         get {
@@ -81,7 +81,7 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
         let emojiArtDocumentKey = "EmojiArtDocumentViewModel.Untitled\(id)"
         let emojiArtJson = UserDefaults.standard.data(forKey: emojiArtDocumentKey)
         emojiArtModel = EmojiArtModel(json: emojiArtJson) ?? EmojiArtModel()
-        timeSpentFormatted = Formatter.time.string(from: TimeInterval(emojiArtModel.timeSpent)) ?? "n.a"
+        timeSpentFormatted = Formatter.time.string(from: TimeInterval(emojiArtModel.timeSpent)) ?? timeNotAvailable
         emojiartModelSink = $emojiArtModel.sink { emojiArtModel in
             UserDefaults.standard.set(emojiArtModel.json, forKey: emojiArtDocumentKey)
         }
@@ -103,7 +103,7 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
 
     func updateTimeSpent() {
         emojiArtModel.timeSpent += 1
-        timeSpentFormatted = Formatter.time.string(from: TimeInterval(emojiArtModel.timeSpent)) ?? "n.a"
+        timeSpentFormatted = Formatter.time.string(from: TimeInterval(emojiArtModel.timeSpent)) ?? timeNotAvailable
     }
 
     // MARK: - Intents
@@ -127,6 +127,10 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
         }
     }
 }
+
+// MARK: - String constants
+
+private let timeNotAvailable: String = "n.a"
 
 extension EmojiArtModel.Emoji {
     var fontSize: CGFloat { CGFloat(size) }
