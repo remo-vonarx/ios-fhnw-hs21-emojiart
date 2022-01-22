@@ -78,7 +78,7 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
 
     init(id: UUID = UUID()) {
         self.id = id
-        let emojiArtDocumentKey = "EmojiArtDocumentViewModel.Untitled\(id)"
+        let emojiArtDocumentKey = "EmojiArtDocumentViewModel.Document.\(id)"
         let emojiArtJson = UserDefaults.standard.data(forKey: emojiArtDocumentKey)
         emojiArtModel = EmojiArtModel(json: emojiArtJson) ?? EmojiArtModel()
         timeSpentFormatted = Formatter.time.string(from: TimeInterval(emojiArtModel.timeSpent)) ?? timeNotAvailable
@@ -98,7 +98,6 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
     func stopTimeTracker() {
         timerSubscription?.cancel()
         timer?.upstream.connect().cancel()
-        UserDefaults.standard.set(emojiArtModel.timeSpent, forKey: "EmojiArtDocumentViewModel.\(id).timeSpent")
     }
 
     func updateTimeSpent() {
