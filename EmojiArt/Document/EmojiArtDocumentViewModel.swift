@@ -65,6 +65,12 @@ class EmojiArtDocumentViewModel: ObservableObject, Equatable, Hashable, Identifi
         }
     }
     
+    var createdFormatted: String {
+        get {
+            Date(timeIntervalSince1970: emojiArtModel.created).getFormattedDate(format: "dd.MM.yyyy")
+        }
+    }
+    
     var backgroundURL: URL? {
         get {
             emojiArtModel.backgroundURL

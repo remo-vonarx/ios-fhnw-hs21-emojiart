@@ -28,8 +28,8 @@ struct EmojiArtDocumentPreview: View {
                     .aspectRatio(ratio, contentMode: .fit)
                     .overlay(RoundedRectangle(cornerRadius: corner).stroke(.black, lineWidth: lineWidth))
             }
-            Text(documentName).font(customFont)
-            Text("Time spent: \(document.timeSpentFormatted)").font(customFont).foregroundColor(.black)
+            Text(documentName).font(customFont).foregroundColor(.black)
+            Text("Created: \(document.createdFormatted)").font(customFont).foregroundColor(.gray)
         }
     }
 }
