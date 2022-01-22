@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A65F8C6A279C3B1C0015DD1B /* EmojiArtDocumentPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65F8C69279C3B1C0015DD1B /* EmojiArtDocumentPreview.swift */; };
 		A67353322764E911003BBFA7 /* ColorPickerEditor.swift in Sources */ = {isa = PBXBuildFile; fileRef = A67353312764E911003BBFA7 /* ColorPickerEditor.swift */; };
 		A678AA64273F3672006A72C1 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A678AA63273F3672006A72C1 /* Launch Screen.storyboard */; };
 		A68580AD27465B7500CBA4B8 /* PaletteChooser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A68580AC27465B7500CBA4B8 /* PaletteChooser.swift */; };
@@ -49,6 +50,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		A65F8C69279C3B1C0015DD1B /* EmojiArtDocumentPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiArtDocumentPreview.swift; sourceTree = "<group>"; };
 		A67353312764E911003BBFA7 /* ColorPickerEditor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorPickerEditor.swift; sourceTree = "<group>"; };
 		A678AA63273F3672006A72C1 /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		A68580AC27465B7500CBA4B8 /* PaletteChooser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaletteChooser.swift; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 				A6F0931F2754366F00488909 /* EmojiArtDocumentChooser.swift */,
 				A6B8F01727751DC000CC4F01 /* FontPicker.swift */,
 				A6EF5EB12754167200559609 /* EditableText.swift */,
+				A65F8C69279C3B1C0015DD1B /* EmojiArtDocumentPreview.swift */,
 			);
 			path = Overview;
 			sourceTree = "<group>";
@@ -328,6 +331,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A6B8F01827751DC000CC4F01 /* FontPicker.swift in Sources */,
+				A65F8C6A279C3B1C0015DD1B /* EmojiArtDocumentPreview.swift in Sources */,
 				A6EF5EB22754167200559609 /* EditableText.swift in Sources */,
 				A67353322764E911003BBFA7 /* ColorPickerEditor.swift in Sources */,
 				DEF3E527272AF08800A93527 /* EmojiArtModel.swift in Sources */,
