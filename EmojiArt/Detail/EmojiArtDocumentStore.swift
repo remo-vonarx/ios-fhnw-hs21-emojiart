@@ -1,5 +1,5 @@
-import Foundation
 import Combine
+import Foundation
 
 class EmojiArtDocumentStore: ObservableObject {
     private static let persistenceKeyPrefix = "EmojiArtDocumentStore"
@@ -17,7 +17,7 @@ class EmojiArtDocumentStore: ObservableObject {
     func setName(_ name: String, for document: EmojiArtDocumentViewModel) {
         documentNames[document] = name
     }
-    
+
     var documents: [EmojiArtDocumentViewModel] {
         documentNames.keys.sorted { $0.created > $1.created }
     }
@@ -50,7 +50,7 @@ extension Dictionary where Key == EmojiArtDocumentViewModel, Value == String {
     /// Initialize EmojiArtDocumentViewModels based on their UUID
     init(fromPropertyList plist: Any?) {
         self.init()
-        let uuidToName = plist as? [String:String] ?? [:]
+        let uuidToName = plist as? [String: String] ?? [:]
         for uuid in uuidToName.keys {
             // Loads EmojiArtDocumentViewModel from UserDefaults based on its id
             self[EmojiArtDocumentViewModel(id: UUID(uuidString: uuid)!)] = uuidToName[uuid]
@@ -58,8 +58,8 @@ extension Dictionary where Key == EmojiArtDocumentViewModel, Value == String {
     }
 
     /// Map [EmojiArtDocumentViewModel: Name] to [EmojiArtDocumentViewModel.id: Name]
-    var asPropertyList: [String:String] {
-        var uuidToName = [String:String]()
+    var asPropertyList: [String: String] {
+        var uuidToName = [String: String]()
         for (key, value) in self {
             uuidToName[key.id.uuidString] = value
         }

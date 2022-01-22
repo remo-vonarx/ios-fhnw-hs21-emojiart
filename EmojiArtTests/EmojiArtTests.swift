@@ -5,8 +5,8 @@
 //  Created by Oliver Gepp on 28.10.21.
 //
 
-import XCTest
 @testable import EmojiArt
+import XCTest
 
 class EmojiArtTests: XCTestCase {
     var document: EmojiArtDocumentViewModel!
@@ -97,7 +97,7 @@ class EmojiArtTests: XCTestCase {
     }
 
     func testPerformanceAddAndRemoveEmoji() throws {
-        self.measure {
+        measure {
             let emoji = "🙃"
             
             document.addEmoji(emoji, toPalette: document.defaultPalette)

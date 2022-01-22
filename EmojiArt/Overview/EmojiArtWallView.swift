@@ -14,12 +14,12 @@ struct EmojiArtWallView: View {
     init(store: EmojiArtDocumentStore) {
         self.store = store
     }
-    
+
     let columns = [
         GridItem(.flexible(minimum: columnSize)),
         GridItem(.flexible(minimum: columnSize)),
     ]
-    
+
     var body: some View {
         ScrollView(.vertical) {
             LazyVGrid(columns: columns, alignment: .center) {

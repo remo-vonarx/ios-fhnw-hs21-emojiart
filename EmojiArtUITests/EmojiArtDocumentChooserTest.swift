@@ -11,7 +11,7 @@ class EmojiArtUITests: XCTestCase {
     private let app = XCUIApplication()
     
     var is_iPad: Bool {
-       return UIDevice.current.userInterfaceIdiom == .pad
+        return UIDevice.current.userInterfaceIdiom == .pad
     }
     
     override func setUpWithError() throws {
@@ -23,7 +23,7 @@ class EmojiArtUITests: XCTestCase {
         setUpAppForDevice()
         app.navigationBars["Emoji Art"].buttons["Add"].tap()
         
-        //This is called before all the test methods are being called
+        // This is called before all the test methods are being called
     }
     
     override func tearDownWithError() throws {
@@ -32,25 +32,25 @@ class EmojiArtUITests: XCTestCase {
         // clean up created test element
         let tablesQuery = app.tables
         tablesQuery.cells.element(boundBy: 0).swipeLeft()
-        tablesQuery/*@START_MENU_TOKEN@*/.buttons["Delete"]/*[[".cells.buttons[\"Delete\"]",".buttons[\"Delete\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        tablesQuery/*@START_MENU_TOKEN@*/ .buttons["Delete"]/*[[".cells.buttons[\"Delete\"]",".buttons[\"Delete\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/ .tap()
         
-        //This is called after all the test methods got called
+        // This is called after all the test methods got called
     }
     
     fileprivate func setUpAppForDevice() {
-        //define some test input, also to satisfy some Grenzwerte
-        //Check if the device is an iPad.
-        if(is_iPad){
-            //If the DocumentChooser Button is visible, tap on it to reach the DocumentChooser.
+        // define some test input, also to satisfy some Grenzwerte
+        // Check if the device is an iPad.
+        if is_iPad {
+            // If the DocumentChooser Button is visible, tap on it to reach the DocumentChooser.
             let documentChooserButton = app.buttons["Emoji Art"]
-            if(documentChooserButton.exists){
+            if documentChooserButton.exists {
                 documentChooserButton.tap()
             }
         }
     }
     
-    func testEditDocumentTitles() throws{
-        let titles:[String] = ["EmojiArt", "My first EmojiArt", "🙃", "", " "]
+    func testEditDocumentTitles() throws {
+        let titles: [String] = ["EmojiArt", "My first EmojiArt", "🙃", "", " "]
         
         for title in titles {
             try editDocumentTitle(title: title)
@@ -58,38 +58,38 @@ class EmojiArtUITests: XCTestCase {
     }
 
     func editDocumentTitle(title: String) throws {
-        //Check if there are some documents
+        // Check if there are some documents
         let cells = app.tables.cells.count
         XCTAssertTrue(cells > 0)
         
-        //Get the first document because it's always be there by default.
+        // Get the first document because it's always be there by default.
         let firstDocument = app.tables.cells.element(boundBy: 0)
         XCTAssertTrue(firstDocument.exists)
         
-        //Fetch the name by the document label so it can be used later.
+        // Fetch the name by the document label so it can be used later.
         let firstDocumentName = firstDocument.label
         
-        //Fetch the navigation bar and tap "Edit"
+        // Fetch the navigation bar and tap "Edit"
         let emojiArtNavigationBar = app.navigationBars["Emoji Art"]
         XCTAssertTrue(emojiArtNavigationBar.exists)
         emojiArtNavigationBar.buttons["Edit"].tap()
         
-        //Tap into the first document to get let EditableText appear as a TextField.
+        // Tap into the first document to get let EditableText appear as a TextField.
         firstDocument.tap()
         
-        //Fetch for the first textField (there should only be one).
+        // Fetch for the first textField (there should only be one).
         let documentTitleTextField = app.textFields.firstMatch
         XCTAssertTrue(documentTitleTextField.exists)
         
-        //First clear the current title by pressing delete the amount of initial documentName.
+        // First clear the current title by pressing delete the amount of initial documentName.
         let deleteInput = String(repeating: XCUIKeyboardKey.delete.rawValue, count: firstDocumentName.count)
         documentTitleTextField.typeText(deleteInput)
         
-        //Check if the deletion succeeded by checking the size
+        // Check if the deletion succeeded by checking the size
         let currentDocumentTitle = documentTitleTextField.value as! String
         XCTAssertTrue(currentDocumentTitle.count == 0)
         
-        //Now type the new document title and press "Done".
+        // Now type the new document title and press "Done".
         documentTitleTextField.typeText(title)
         emojiArtNavigationBar.buttons["Done"].tap()
         

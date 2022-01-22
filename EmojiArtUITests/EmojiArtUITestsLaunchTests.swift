@@ -8,7 +8,6 @@
 import XCTest
 
 class EmojiArtUITestsLaunchTests: XCTestCase {
-
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
     }

@@ -19,7 +19,7 @@ struct ColorPickerEditor: View {
         VStack {
             HStack {
                 Spacer()
-                Text("Background Color Editor")
+                Text("Background Editor")
                     .font(.headline)
                     .padding()
                 Spacer()

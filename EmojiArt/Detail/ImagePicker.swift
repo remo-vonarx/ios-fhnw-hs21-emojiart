@@ -14,9 +14,7 @@ struct ImagePicker: UIViewControllerRepresentable {
         return viewController
     }
 
-    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
-        
-    }
+    func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {}
 
     func makeCoordinator() -> Coordinator {
         Coordinator(handlePickedImage: handlePickedImage)
@@ -29,7 +27,7 @@ struct ImagePicker: UIViewControllerRepresentable {
             self.handlePickedImage = handlePickedImage
         }
 
-        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
             let image = info[.originalImage] as? UIImage
             handlePickedImage(image)
         }
