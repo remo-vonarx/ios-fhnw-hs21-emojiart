@@ -32,4 +32,4 @@
     * Es werden verschiedene Strings nacheinander getestet
 - 6
 
-(Eingerückte Punkte wurden zusätzlich implementiert.)
+Eingerückte Punkte wurden zusätzlich implementiert - wir hoffen das reicht für mindestens eine 5.9 :)
